@@ -1,7 +1,5 @@
 var app = require('app');
 var BrowserWindow = require('browser-window');
-var Menu = require('menu');
-var MenuItem = require('menu-item');
 
 require('crash-reporter').start();
 
@@ -17,6 +15,8 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    'min-width': 640,
+    'min-height': 480,
     resizable: true
 
   });
