@@ -1,5 +1,9 @@
 {
   "name": "your-app",
   "version": "0.0.0",
-  "main": "main.js"
+  "main": "main.js",
+  "devDependencies": {
+    "gulp": "^3.7.0",
+    "gulp-download-atom-shell": "0.0.3"
+  }
 }
