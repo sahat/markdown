@@ -6,7 +6,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 200px;
+  width: 225px;
   background: limegreen;
 }
 
@@ -18,8 +18,13 @@
   box-sizing: border-box;
   height: 100%;
   overflow-x: hidden;
-  padding-left: 200px;
+  padding-left: 225px;
   width: 100%;
+}
+
+.topbar {
+  box-sizing: border-box;
+  height: 40px;
 }
 
 .CodeMirror {
@@ -29,3 +34,8 @@
 .cm-s-default .cm-trailing-space-a:before,
 .cm-s-default .cm-trailing-space-b:before {position: absolute; content: "\00B7"; color: #777;}
 .cm-s-default .cm-trailing-space-new-line:before {position: absolute; content: "\21B5"; color: #777;}
+
+.no-gutter {
+    padding-left: 0;
+    padding-right: 0;
+}

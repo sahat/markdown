@@ -1,60 +1,54 @@
 <html>
 <head>
-  <title>Hello World!</title>
+  <title>Editor</title>
   <link rel="stylesheet" href="css/foundation.css"/>
   <link rel="stylesheet" href="css/codemirror.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
-
-
-<nav class="top-bar" data-topbar>
-  <ul class="title-area">
-    <li class="name">
-      <h1><a href="#">My Site</a></h1>
-    </li>
-    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-  </ul>
-
-  <section class="top-bar-section">
-    <!-- Right Nav Section -->
-    <ul class="right">
-      <li class="active"><a href="#">Right Button Active</a></li>
-      <li class="has-dropdown">
-        <a href="#">Right Button Dropdown</a>
-        <ul class="dropdown">
-          <li><a href="#">First link in dropdown</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <!-- Left Nav Section -->
-    <ul class="left">
-      <li><a href="#">Left Nav Button</a></li>
-    </ul>
-  </section>
-</nav>
-
-<div class="container">
-  <div class="sidebar">
-    Sidebar
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      Text editor
-
-      <div id="editor"></div>
-
-      <h1>Hello World!</h1>
-      We are using node.js <script>document.write(process.version)</script>
-      and atom-shell <script>document.write(process.versions['atom-shell'])</script>.
-
-      <div id="container"></div>
-
+ 
+  <div class="container">
+    <div class="sidebar">
+      <a href="#" class="button tiny">Back</a>
+      <a href="#" class="button tiny">Save</a>
+      <a href="#" class="button tiny">New</a>
+      <div class="row">
+        <div class="small-12 columns">
+          <ul class="no-bullet">
+            <li><a href="#">2014-01-01-JanuaryPost.md</a></li>
+            <li><a href="#">2014-01-02-JanuaryPost.md</a></li>
+            <li><a href="#">2014-01-03-JanuaryPost.md</a></li>
+            <li><a href="#">2014-01-04-JanuaryPost.md</a></li>
+            <li><a href="#">2014-01-05-JanuaryPost.md</a></li>
+            <li><a href="#">2014-01-06-JanuaryPost.md</a></li>
+          </ul>
+        </div>
+      </div>
+      
+            
     </div>
+
+
+      <div class="topbar"> 
+       
+          <dl class="sub-nav">
+          
+            <dd class="active"><a href="#">Markdown</a></dd>
+            <dd><a href="#">Split</a></dd>
+            <dd><a href="#">Preview</a></dd>
+          </dl>
+        
+
+       
+      </div>
+      <div class="row">
+        <div id="editor"></div>
+        <div id="container"></div>
+      </div>
+
+    
   </div>
-</div>
+
 
 <script src="vendor/jquery-2.1.1.js"></script>
 <script src="vendor/codemirror.js"></script>
