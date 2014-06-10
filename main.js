@@ -1,3 +1,4 @@
+/*jslint node: true */
 var app = require('app');
 var BrowserWindow = require('browser-window');
 
