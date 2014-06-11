@@ -7,7 +7,9 @@
   left: 0;
   top: 0;
   width: 200px;
-  background: limegreen;
+  padding: 10px;
+  color: rgb(170,170,170);
+  background: rgb(48,48,48);
 }
 
 .container {
@@ -21,6 +23,9 @@
   padding-left: 200px;
   width: 100%;
 }
+
+
+
 
 .CodeMirror {
   font-family: Monaco, monospace;

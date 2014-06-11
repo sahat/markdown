@@ -1,9 +1,15 @@
 {
-  "name": "your-app",
-  "version": "0.0.0",
-  "main": "main.js",
-  "devDependencies": {
-    "gulp": "^3.7.0",
-    "gulp-download-atom-shell": "0.0.3"
-  }
+  "name": "nw-demo",
+  "main": "index.html",
+  "version": "0.0.1",
+  "single-instance": true,
+  "window": {
+    "title": "Markdown",
+    "width": 650,
+    "height": 650,
+    "min_width": 650,
+    "min_height": 650,
+    "toolbar": false
+  },
+  "chromium-args": "--child-clean-exit"
 }
