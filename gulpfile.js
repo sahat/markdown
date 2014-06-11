@@ -3,7 +3,7 @@ var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 
 gulp.task('sass', function() {
-  gulp.src('css/style.scss')
+  gulp.src('css/styles.scss')
     .pipe(plumber())
     .pipe(sass())
     .pipe(gulp.dest('css'));
