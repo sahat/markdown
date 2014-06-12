@@ -1,34 +1,55 @@
 <html>
 <head>
   <title>Hello World!</title>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
 </head>
 <body>
 
-<nav class="top-bar" data-topbar>
-  <section class="top-bar-section">
-    <ul class="left">
-      <li><a href="#">+ New Post</a></li>
-    </ul>
-  </section>
-</nav>
+<div class="fixed">
+  <nav class="top-bar" data-topbar>
+    <section class="top-bar-section">
+      <ul class="left">
+        <li><a href="#">+ New Post</a></li>
+      </ul>
+      <ul class="right">
+        <li><a href="#">Select Blog</a></li>
+      </ul>
+    </section>
+  </nav>
+</div>
 
-<div class="container">
+<div class="row">
 
-  <iframe src="demo.html" width="100%" height="100%" frameborder="0">
-    <p>Your browser does not support iframes.</p>
-  </iframe>
+  <div class="small-12 columns">
 
-  <div id="editor"></div>
-  <div id="container"></div>
+    <iframe id="frame" src="http://localhost:4100" width="100%" height="100%" frameborder="0"></iframe>
+
+    <!--Editor:-->
+    <!--<div id="editor">-->
+      <!--An h1 header-->
+      <!--============-->
+
+      <!--Paragraphs are separated by a blank line.-->
+
+      <!--2nd paragraph. *Italic*, **bold**, `monospace`. Itemized lists-->
+      <!--look like:-->
+
+      <!--* this one-->
+      <!--* that one-->
+      <!--* the other one-->
+    <!--</div>-->
+    <!--<div id="container"></div>-->
+  </div>
 
 </div>
 
-<script src="vendor/pen.js"></script>
-<script src="vendor/markdown.js"></script>
-<script src="vendor/react.js"></script>
-<script src="vendor/JSXTransformer.js"></script>
-<script type="text/jsx" src="js/example.js"></script>
-<script src="js/app.js"></script>
+<script src="assets/js/vendor/jquery.js"></script>
+<script src="assets/js/vendor/marked.js"></script>
+<script src="assets/js/vendor/pen.js"></script>
+<script src="assets/js/vendor/markdown.js"></script>
+<script src="assets/js/vendor/react.js"></script>
+<script src="assets/js/vendor/JSXTransformer.js"></script>
+<script type="text/jsx" src="assets/js/example.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
