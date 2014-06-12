@@ -1,35 +1,36 @@
+var fs = require('fs');
 var http = require('http');
 var marked = require('marked');
-var fs = require('fs');
 var EventEmitter = require('events').EventEmitter;
 
 var ee = new EventEmitter();
 
+document.getElementById('openBlog').addEventListener('click', function() {
+  var chooser = document.getElementById('fileDialog');
+  chooser.addEventListener('change', function() {
+    ee.emit('getMarkdownFiles', this.value);
+    ee.emit('displayTopBar');
+  });
+  chooser.click();
+});
+
+ee.on('displayTopBar', function() {
+  document.querySelector('.top-bar').classList.remove('hidden');
+});
+
 ee.on('getMarkdownFiles', function(path) {
-  console.log(path);
   fs.readdir(path + '/_posts', function(err, files) {
-    var mdFiles = files.filter(function(file) {
+    var posts = files.filter(function(file) {
       var extension = file.split('.').pop();
       return extension === 'md' || extension === 'markdown'
     });
-    console.log(mdFiles);
+    ee.emit('????', posts);
   });
-
 });
 
-function chooseFile(name) {
-  var chooser = document.querySelector(name);
-  chooser.addEventListener('change', function() {
-    ee.emit('getMarkdownFiles', this.value);
-  });
-
-  chooser.click();
-}
+ee.on()
 
 
-$('#buttonOpen').click(function() {
-  chooseFile('#fileDialog');
-});
 
 fs.readFile("myblog/_posts/2014-06-11-welcome-to-jekyll.markdown", 'utf8', function(err, data) {
 
