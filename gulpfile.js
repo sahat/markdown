@@ -3,14 +3,14 @@ var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 
 gulp.task('sass', function() {
-  gulp.src('css/styles.scss')
+  gulp.src('assets/css/styles.scss')
     .pipe(plumber())
     .pipe(sass())
-    .pipe(gulp.dest('css'));
+    .pipe(gulp.dest('assets/css'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('css/styles.scss', ['sass']);
+  gulp.watch('assets/css/styles.scss', ['sass']);
 });
 
 gulp.task('default', ['sass', 'watch']);

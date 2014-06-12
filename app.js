@@ -1,8 +1,35 @@
-
 var http = require('http');
-var fs = require('fs');
 var marked = require('marked');
+var fs = require('fs');
+var EventEmitter = require('events').EventEmitter;
 
+var ee = new EventEmitter();
+
+ee.on('getMarkdownFiles', function(path) {
+  console.log(path);
+  fs.readdir(path + '/_posts', function(err, files) {
+    var mdFiles = files.filter(function(file) {
+      var extension = file.split('.').pop();
+      return extension === 'md' || extension === 'markdown'
+    });
+    console.log(mdFiles);
+  });
+
+});
+
+function chooseFile(name) {
+  var chooser = document.querySelector(name);
+  chooser.addEventListener('change', function() {
+    ee.emit('getMarkdownFiles', this.value);
+  });
+
+  chooser.click();
+}
+
+
+$('#buttonOpen').click(function() {
+  chooseFile('#fileDialog');
+});
 
 fs.readFile("myblog/_posts/2014-06-11-welcome-to-jekyll.markdown", 'utf8', function(err, data) {
 
@@ -13,10 +40,7 @@ fs.readFile("myblog/_posts/2014-06-11-welcome-to-jekyll.markdown", 'utf8', funct
   $('#editor').html(html);
 
   var options = {
-    editor: document.getElementById('editor'),
-    class: 'pen',
-    textarea: '<textarea name="content">Jello</textarea>',
-    list: ['bold', 'italic', 'underline']
+    editor: document.getElementById('editor')
   };
 
   var editor = new Pen(options);

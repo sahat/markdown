@@ -22,34 +22,31 @@
 
   <div class="small-12 columns">
 
-    <iframe id="frame" src="http://localhost:4100" width="100%" height="100%" frameborder="0"></iframe>
+    <p class="text-center">
+      <br/><br/><br/><br/><br/>
+      <button id="buttonOpen" class="button">Open Blog</button>
+      <input type="file" class="hidden" id="fileDialog" nwdirectory>
+    </p>
 
-    <!--Editor:-->
-    <!--<div id="editor">-->
-      <!--An h1 header-->
-      <!--============-->
 
-      <!--Paragraphs are separated by a blank line.-->
+    <!--<iframe id="frame" src="http://localhost:4100" width="100%" height="100%" frameborder="0"></iframe>-->
 
-      <!--2nd paragraph. *Italic*, **bold**, `monospace`. Itemized lists-->
-      <!--look like:-->
-
-      <!--* this one-->
-      <!--* that one-->
-      <!--* the other one-->
-    <!--</div>-->
-    <!--<div id="container"></div>-->
+    Editor...:
+    <div id="editor"></div>
+    <div id="container"></div>
   </div>
 
 </div>
 
-<script src="assets/js/vendor/jquery.js"></script>
-<script src="assets/js/vendor/marked.js"></script>
-<script src="assets/js/vendor/pen.js"></script>
-<script src="assets/js/vendor/markdown.js"></script>
-<script src="assets/js/vendor/react.js"></script>
-<script src="assets/js/vendor/JSXTransformer.js"></script>
-<script type="text/jsx" src="assets/js/example.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/js/lib/jquery.js"></script>
+<script src="assets/js/lib/marked.js"></script>
+<script src="assets/js/lib/pen.js"></script>
+<script src="assets/js/lib/markdown.js"></script>
+<script src="assets/js/lib/react.js"></script>
+<script src="assets/js/lib/JSXTransformer.js"></script>
+<!--<script type="text/jsx" src="assets/js/example.js"></script>-->
+<script src="app.js"></script>
+
+
 </body>
 </html>
