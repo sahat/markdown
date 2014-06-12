@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "single-instance": true,
   "window": {
-    "title": "Markdown",
+    "title": "Github Markdown",
     "width": 650,
     "height": 650,
     "min_width": 650,
