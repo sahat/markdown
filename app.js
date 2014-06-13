@@ -1,50 +1,105 @@
+var EventEmitter = require('events').EventEmitter;
+var exec = require('child_process').exec;
 var fs = require('fs');
 var http = require('http');
 var marked = require('marked');
-var EventEmitter = require('events').EventEmitter;
+var _ = require('lodash');
+var gui = require('nw.gui'); //or global.window.nwDispatcher.requireNwGui() (see https://github.com/rogerwang/node-webkit/issues/707)
 
-var ee = new EventEmitter();
+$('#frame').load(function() {
+  alert("the iframe has changed.");
+  console.log(document.getElementById('frame').contentWindow.location.pathname);
+});
+
+// Get the current window
+var win = gui.Window.get();
+
+// Listen to the minimize event
+win.on('close', function() {
+  console.log('Window is closed');
+  flow.emit('killJekyll');
+});
+
+// TODO: Remove class,
+var flow = new EventEmitter();
 
 document.getElementById('openBlog').addEventListener('click', function() {
   var chooser = document.getElementById('fileDialog');
   chooser.addEventListener('change', function() {
-    ee.emit('getMarkdownFiles', this.value);
-    ee.emit('displayTopBar');
+    var blogDir = this.value;
+    flow.emit('getMarkdownFiles', blogDir);
+    flow.emit('start-jekyll', blogDir);
+    flow.emit('showTopBar');
   });
   chooser.click();
 });
 
-ee.on('displayTopBar', function() {
+flow.on('start-jekyll', function(blogDir) {
+  var child = exec('jekyll serve -P 8900 --watch -s ' + blogDir,
+    function (error, stdout, stderr) {
+      document.getElementById('main').innerHTML = '<iframe src="http://localhost:8900" width="100%" height="100%" frameborder="0"></iframe>';
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+    });
+  flow.on('killJekyll', function() {
+    console.log('Killing Jekyll');
+    child.kill('SIGHUP');
+  })
+});
+
+
+flow.on('showTopBar', function() {
   document.querySelector('.top-bar').classList.remove('hidden');
 });
 
-ee.on('getMarkdownFiles', function(path) {
+flow.on('getMarkdownFiles', function(path) {
   fs.readdir(path + '/_posts', function(err, files) {
-    var posts = files.filter(function(file) {
+
+    if (!files) {
+      alert('No posts found');
+    }
+
+    var posts = _.filter(files, function(file) {
       var extension = file.split('.').pop();
       return extension === 'md' || extension === 'markdown'
     });
-    ee.emit('????', posts);
+
+//    flow.emit('readMarkdownFiles', path, posts);
   });
 });
 
-ee.on()
+flow.on('readMarkdownFiles', function(path, posts) {
 
+  var renderer = new marked.Renderer();
 
-
-fs.readFile("myblog/_posts/2014-06-11-welcome-to-jekyll.markdown", 'utf8', function(err, data) {
-
-  var html = marked(data);
-
-  console.log(html);
-
-  $('#editor').html(html);
-
-  var options = {
-    editor: document.getElementById('editor')
+  renderer.image = function (href, title, text) {
+    var out = '<img src="' + path + href + '" alt="' + text + '"';
+    if (title) {
+      out += ' title="' + title + '"';
+    }
+    out += this.options.xhtml ? '/>' : '>';
+    return out;
   };
 
-  var editor = new Pen(options);
+  _.each(posts, function(post) {
+
+    var file = fs.readFileSync(path + '/_posts/' + post, 'utf8');
+
+    $('.highlight').each(function(index, element) {
+      console.log('found highlight');
+      var language = $(this).find('code').attr('class');
+      var text = $(this).text();
+      $(this).text('{% highlight js %}\n' + text + '\n{% endhighlight %}');
+    });
+
+    $('.side-nav').append('<li><a href="#">' + post  + '</a></li>');
+    var html = marked(file, { renderer: renderer });
+    $('#editor').html(html);
+    var options = {
+      editor: document.getElementById('editor')
+    };
+    var editor = new Pen(options);
+  });
 
 });
 
