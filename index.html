@@ -5,8 +5,8 @@
 </head>
 <body>
 
-<div class="fixed">
-  <nav class="top-bar hidden">
+<div class="fixed hidden">
+  <nav class="top-bar">
     <section class="top-bar-section">
       <ul class="left">
         <li><a href="#">+ New Post</a></li>
@@ -18,28 +18,16 @@
   </nav>
 </div>
 
-<div class="row">
-
-  <div class="small-12 columns">
-
-    <p class="text-center">
-      <br/><br/><br/><br/><br/>
-      <button id="openBlog" class="button">Open Blog</button>
-      <input type="file" class="hidden" id="fileDialog" nwdirectory>
-    </p>
-
-
-    <!--<iframe id="frame" src="http://localhost:4100" width="100%" height="100%" frameborder="0"></iframe>-->
-
-    Editor...:
-    <div id="editor"></div>
-    <div id="container"></div>
+<div id="main">
+  <div class="center">
+    <button id="openBlog" class="button">Open Blog</button>
+    <input type="file" class="hidden" id="fileDialog" nwdirectory>
   </div>
-
 </div>
 
 <script src="assets/js/lib/jquery.js"></script>
 <script src="assets/js/lib/marked.js"></script>
+<script src="assets/js/lib/html2md.js"></script>
 <script src="assets/js/lib/pen.js"></script>
 <script src="assets/js/lib/markdown.js"></script>
 <script src="assets/js/lib/react.js"></script>
