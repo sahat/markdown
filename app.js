@@ -1,55 +1,82 @@
 var EventEmitter = require('events').EventEmitter;
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 var fs = require('fs');
 var http = require('http');
-var marked = require('marked');
+var md = require('html-md');
 var _ = require('lodash');
-var gui = require('nw.gui'); //or global.window.nwDispatcher.requireNwGui() (see https://github.com/rogerwang/node-webkit/issues/707)
+var gui = require('nw.gui');
 
-$('#frame').load(function() {
-  alert("the iframe has changed.");
-  console.log(document.getElementById('frame').contentWindow.location.pathname);
-});
-
-// Get the current window
+// Open a new window.
 var win = gui.Window.get();
 
-// Listen to the minimize event
-win.on('close', function() {
-  console.log('Window is closed');
-  flow.emit('killJekyll');
+// Release the 'win' object here after the new window is closed.
+win.on('closed', function() {
+  win = null;
 });
 
-// TODO: Remove class,
+// Listen to main window's close event
+gui.Window.get().on('close', function() {
+  // Hide the window to give user the feeling of closing immediately
+  this.hide();
+
+  // If the new window is still open then close it.
+  if (win != null)
+    win.close(true);
+
+  // After closing the new window, close the main window.
+  this.close(true);
+});
+
+$('iframe').load(function() {
+  console.log(document.getElementsByTagName('iframe').contentWindow.location.pathname);
+});
+
 var flow = new EventEmitter();
 
 document.getElementById('openBlog').addEventListener('click', function() {
   var chooser = document.getElementById('fileDialog');
   chooser.addEventListener('change', function() {
     var blogDir = this.value;
-    flow.emit('getMarkdownFiles', blogDir);
     flow.emit('start-jekyll', blogDir);
-    flow.emit('showTopBar');
+    flow.emit('getMarkdownFiles', blogDir);
   });
   chooser.click();
 });
 
-flow.on('start-jekyll', function(blogDir) {
-  var child = exec('jekyll serve -P 8900 --watch -s ' + blogDir,
-    function (error, stdout, stderr) {
-      document.getElementById('main').innerHTML = '<iframe src="http://localhost:8900" width="100%" height="100%" frameborder="0"></iframe>';
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-    });
-  flow.on('killJekyll', function() {
-    console.log('Killing Jekyll');
-    child.kill('SIGHUP');
-  })
+flow.on('loading', function() {
+  document.getElementById('main').innerHTML = '<h2 class="text-center">Loading...</h2>';
 });
 
+flow.on('start-http-server', function(source) {
 
-flow.on('showTopBar', function() {
-  document.querySelector('.top-bar').classList.remove('hidden');
+  var server = spawn('node', ['node_modules/http-server/bin/http-server', source + '/_site']);
+
+  server.stdout.on('data', function (data) {
+    console.log('stdout: ' + data);
+    document.getElementById('main').innerHTML = '<iframe src="http://localhost:' + 8080 + '" width="100%" height="100%" frameborder="0"></iframe>';
+    flow.emit('show-top-bar');
+  });
+
+  server.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  server.on('close', function (code) {
+    console.log('child process exited with code ' + code);
+  });
+});
+
+flow.on('start-jekyll', function(source) {
+  flow.emit('loading');
+  var child = exec('jekyll build -s ' + source, function(err, stdout, stderr) {
+    console.log(stdout);
+    flow.emit('start-http-server', source);
+  });
+});
+
+flow.on('show-top-bar', function() {
+  document.querySelector('.fixed').classList.remove('hidden');
 });
 
 flow.on('getMarkdownFiles', function(path) {
@@ -68,40 +95,40 @@ flow.on('getMarkdownFiles', function(path) {
   });
 });
 
-flow.on('readMarkdownFiles', function(path, posts) {
-
-  var renderer = new marked.Renderer();
-
-  renderer.image = function (href, title, text) {
-    var out = '<img src="' + path + href + '" alt="' + text + '"';
-    if (title) {
-      out += ' title="' + title + '"';
-    }
-    out += this.options.xhtml ? '/>' : '>';
-    return out;
-  };
-
-  _.each(posts, function(post) {
-
-    var file = fs.readFileSync(path + '/_posts/' + post, 'utf8');
-
-    $('.highlight').each(function(index, element) {
-      console.log('found highlight');
-      var language = $(this).find('code').attr('class');
-      var text = $(this).text();
-      $(this).text('{% highlight js %}\n' + text + '\n{% endhighlight %}');
-    });
-
-    $('.side-nav').append('<li><a href="#">' + post  + '</a></li>');
-    var html = marked(file, { renderer: renderer });
-    $('#editor').html(html);
-    var options = {
-      editor: document.getElementById('editor')
-    };
-    var editor = new Pen(options);
-  });
-
-});
+//flow.on('readMarkdownFiles', function(path, posts) {
+//
+//  var renderer = new marked.Renderer();
+//
+//  renderer.image = function(href, title, text) {
+//    var out = '<img src="' + path + href + '" alt="' + text + '"';
+//    if (title) {
+//      out += ' title="' + title + '"';
+//    }
+//    out += this.options.xhtml ? '/>' : '>';
+//    return out;
+//  };
+//
+//  _.each(posts, function(post) {
+//
+//    var file = fs.readFileSync(path + '/_posts/' + post, 'utf8');
+//
+//    $('.highlight').each(function(index, element) {
+//      console.log('found highlight');
+//      var language = $(this).find('code').attr('class');
+//      var text = $(this).text();
+//      $(this).text('{% highlight js %}\n' + text + '\n{% endhighlight %}');
+//    });
+//
+//    $('.side-nav').append('<li><a href="#">' + post + '</a></li>');
+//    var html = marked(file, { renderer: renderer });
+//    $('#editor').html(html);
+//    var options = {
+//      editor: document.getElementById('editor')
+//    };
+//    var editor = new Pen(options);
+//  });
+//
+//});
 
 
 //http.get('http://localhost:4000', function(err, data) {
