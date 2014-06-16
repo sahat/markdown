@@ -28,9 +28,9 @@ gui.Window.get().on('close', function() {
   this.close(true);
 });
 
-$('iframe').load(function() {
-  console.log(document.getElementsByTagName('iframe').contentWindow.location.pathname);
-});
+function getUrl() {
+  console.log(document.getElementsByTagName('iframe')[0].contentWindow.location.pathname);
+}
 
 var flow = new EventEmitter();
 
@@ -45,16 +45,18 @@ document.getElementById('openBlog').addEventListener('click', function() {
 });
 
 flow.on('loading', function() {
-  document.getElementById('main').innerHTML = '<h2 class="text-center">Loading...</h2>';
+  document.getElementById('home').innerHTML = '<h2 class="text-center">Loading...</h2>';
 });
 
 flow.on('start-http-server', function(source) {
 
   var server = spawn('node', ['node_modules/http-server/bin/http-server', source + '/_site']);
 
-  server.stdout.on('data', function (data) {
+  server.stdout.once('data', function (data) {
     console.log('stdout: ' + data);
-    document.getElementById('main').innerHTML = '<iframe src="http://localhost:' + 8080 + '" width="100%" height="100%" frameborder="0"></iframe>';
+    var url = 'http://localhost:8080';
+    document.querySelector('body').classList.remove('cover');
+    document.getElementById('main').innerHTML = '<iframe onload="getUrl()" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
     flow.emit('show-top-bar');
   });
 

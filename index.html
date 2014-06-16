@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<div class="fixed hidden">
+<div class="fixed">
   <nav class="top-bar">
     <section class="top-bar-section">
       <ul class="left">
@@ -19,9 +19,11 @@
 </div>
 
 <div id="main">
-  <button id="openBlog" class="btn outline">Open Blog</button>
-  <input type="file" class="hidden" id="fileDialog" nwdirectory>
-  <h4>Select a local Jekyll blog</h4>
+  <div id="home">
+    <button id="openBlog" class="btn outline">Open Blog</button>
+    <input type="file" class="hidden" id="fileDialog" nwdirectory>
+    <h4>Select a local Jekyll blog</h4>
+  </div>
 </div>
 
 <script src="assets/js/lib/jquery.js"></script>
