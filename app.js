@@ -139,14 +139,15 @@ var Welcome = React.createClass({
     this.props.updatePath('C:/');
     this.refs.fileDialog.getDOMNode().click();
   },
-  updatePath: function() {
-    console.log(this);
+  updatePath: function(e) {
+    console.log(e.target.value);
+    this.props.updatePath(e.target.value);
   },
   render: function() {
     return (
       <div className="welcome">
         <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
-        <input ref="fileDialog" type="file" className="" />
+        <input ref="fileDialog" type="file" className="hidden" />
         <h5>{this.props.path}</h5>
         <h4>Select a local Jekyll blog</h4>
       </div>
