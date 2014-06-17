@@ -131,14 +131,17 @@
 //});
 
 var Welcome = React.createClass({
+
+  handleClick: function() {
+    this.props.updatePath('C:/');
+  },
   render: function() {
     return (
-      <div id="main">
-        <div id="home">
-          <button id="openBlog" className="btn outline">Open Blog</button>
-          <input type="file" className="hidden" id="fileDialog" nwdirectory />
-          <h4>Select a local Jekyll blog</h4>
-        </div>
+      <div className="welcome">
+        <button id="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
+        <input type="file" className="hidden" id="fileDialog" nwdirectory />
+        <h5>{this.props.path}</h5>
+        <h4>Select a local Jekyll blog</h4>
       </div>
     );
   }
@@ -151,12 +154,12 @@ var Topbar = React.createClass({
         <nav className="top-bar">
           <section className="top-bar-section">
             <ul className="left">
-              <li id="newPost"><a href="#"><i className="fa fa-file"></i> New Post</a></li>
-              <li id="savePost"><a href="#"><i className="fa fa-database"></i> Save</a></li>
+              <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+              <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
               <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
             </ul>
             <ul className="right">
-              <li id="closeBlog"><a href="#"><i className="fa fa-arrow-left"></i> Back</a></li>
+              <li id="closeBlog"><a href="#">Close</a></li>
             </ul>
           </section>
         </nav>
@@ -167,7 +170,7 @@ var Topbar = React.createClass({
 
 var Iframe = React.createClass({
   render: function() {
-    return <iframe src={this.props.url} width="100%" height="100%" frameborder="0"></iframe>
+    return <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
   }
 });
 
@@ -180,12 +183,28 @@ var App = React.createClass({
       posts: []
     }
   },
+  updatePath: function(path) {
+    this.setState({
+      path: path
+    });
+  },
   render: function() {
     return (
       <div>
-        <Topbar />
-        <Welcome />
-        <Iframe />
+        <Topbar
+          blogDidLoad={this.state.blogDidLoad}
+          editMode={this.state.editMode}
+        />
+        <Welcome
+          blogDidLoad={this.state.blogDidLoad}
+          editMode={this.state.editMode}
+          updatePath={this.updatePath}
+          path={this.state.path}
+        />
+        <Iframe
+          blogDidLoad={this.state.blogDidLoad}
+          editMode={this.state.editMode}
+        />
       </div>
     );
   }
