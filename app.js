@@ -2,11 +2,11 @@
 
 //var EventEmitter = require('events').EventEmitter;
 //var exec = require('child_process').exec;
-//var spawn = require('child_process').spawn;
+var spawn = require('child_process').spawn;
 //var fs = require('fs');
 //var http = require('http');
 //var md = require('html-md');
-//var _ = require('lodash');
+var _ = require('lodash');
 //
 //var flow = new EventEmitter();
 //
@@ -139,9 +139,37 @@ var Home = React.createClass({
     this.props.updatePath('C:/');
     this.refs.fileDialog.getDOMNode().click();
   },
+  updatePosts: function() {
+
+  },
   updatePath: function(e) {
     console.log(e.target.value);
     this.props.updatePath(e.target.value);
+
+    var server = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
+
+    server.stdout.once('data', function (data) {
+      console.log('stdout: ' + data);
+    });
+    server.stdout.on('data', function (data) {
+      console.log('stdout: ' + data);
+    });
+    server.stderr.on('data', function (data) {
+      console.log('stderr: ' + data);
+    });
+    server.on('close', function (code) {
+      console.log('child process exited with code ' + code);
+    });
+
+    fs.readdir(path + '/_posts', function(err, files) {
+
+      var posts = _.filter(files, function(file) {
+        var extension = file.split('.').pop();
+        return extension === 'md' || extension === 'markdown'
+      });
+
+      flow.emit('checkIfInEditMode', posts);
+    });
   },
   render: function() {
     var view = null;
@@ -201,6 +229,11 @@ var App = React.createClass({
       path: path
     });
   },
+  updatePosts: function(posts) {
+    this.setState({
+      posts: posts
+    });
+  },
   render: function() {
     return (
       <div>
@@ -208,6 +241,7 @@ var App = React.createClass({
           blogDidLoad={this.state.blogDidLoad}
           editMode={this.state.editMode}
           updatePath={this.updatePath}
+          updatePosts={this.updatePosts}
           path={this.state.path}
         />
       </div>
