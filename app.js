@@ -1,13 +1,12 @@
 /** @jsx React.DOM */
 
-//var EventEmitter = require('events').EventEmitter;
-//var exec = require('child_process').exec;
+var _ = require('lodash');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
-//var http = require('http');
-//var md = require('html-md');
-var _ = require('lodash');
-//
+var http = require('http');
+var md = require('html-md');
+var gui = require('nw.gui');
+
 //var flow = new EventEmitter();
 //
 //document.getElementById('openBlog').addEventListener('click', function() {
@@ -146,19 +145,26 @@ var Home = React.createClass({
     console.log(e.target.value);
     this.props.updatePath(e.target.value);
 
-    var server = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
+    jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
-    server.stdout.once('data', function (data) {
+    jekyll.stdout.once('data', function (data) {
       console.log('stdout: ' + data);
     });
-    server.stdout.on('data', function (data) {
+    jekyll.stdout.on('data', function (data) {
       console.log('stdout: ' + data);
     });
-    server.stderr.on('data', function (data) {
+    jekyll.stderr.on('data', function (data) {
       console.log('stderr: ' + data);
     });
-    server.on('close', function (code) {
+    jekyll.on('close', function (code) {
       console.log('child process exited with code ' + code);
+    });
+
+    var win = gui.Window.get();
+
+    win.on('close', function() {
+      jekyll.kill();
+      this.close(true);
     });
 
     var files = fs.readdirSync(e.target.value + '/_posts');
