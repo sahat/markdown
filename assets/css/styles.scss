@@ -9,6 +9,7 @@ $button-bg: #000;
 
 body {
   padding-top: 30px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .cover {
@@ -21,6 +22,9 @@ button {
   -webkit-user-select: none;
 }
 
+.fa {
+  margin-right: 5px;
+}
 
 .btn.outline {
   color: #fff;
@@ -39,7 +43,7 @@ button {
   }
 }
 
-#home {
+.welcome {
   text-align: center;
   width: 50%;
   height: 50%;
@@ -51,6 +55,7 @@ button {
 
   h1, h2, h3, h4, h5, h6 {
     color: #fff;
+    font-weight: 300;
     text-shadow: 0 1px 16px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.5);
   }
 }
