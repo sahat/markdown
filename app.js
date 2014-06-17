@@ -130,7 +130,7 @@
 //
 //});
 
-var Login = React.createClass({
+var Welcome = React.createClass({
   render: function() {
     return (
       <div id="main">
@@ -138,8 +138,29 @@ var Login = React.createClass({
           <button id="openBlog" className="btn outline">Open Blog</button>
           <input type="file" className="hidden" id="fileDialog" nwdirectory />
           <h4>Select a local Jekyll blog</h4>
-          </div>
         </div>
+      </div>
+    );
+  }
+});
+
+var TopBar = React.createClass({
+  render: function() {
+    return (
+      <div className="fixed">
+        <nav className="top-bar">
+          <section className="top-bar-section">
+            <ul className="left">
+              <li id="newPost"><a href="#"><i className="fa fa-file"></i> New Post</a></li>
+              <li id="savePost" class="hidden"><a href="#"><i className="fa fa-database"></i> Save</a></li>
+              <li id="publishPost" class="hidden"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
+            </ul>
+            <ul className="right">
+              <li id="closeBlog" className="hidden"><a href="#"><i className="fa fa-arrow-left"></i> Close Blog</a></li>
+            </ul>
+          </section>
+        </nav>
+      </div>
     );
   }
 });
@@ -154,14 +175,16 @@ var App = React.createClass({
     }
   },
   render: function() {
-    return React.DOM.div(null,
-      React.DOM.h1(null, this.state.title),
-      React.DOM.h2(null, this.state.posts.length)
+    return (
+      <div>
+        <TopBar />
+        <Welcome />
+      </div>
     );
   }
 });
 
 React.renderComponent(
-  <Login />,
+  <App />,
   document.body
 );
