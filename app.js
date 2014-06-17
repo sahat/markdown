@@ -130,7 +130,7 @@
 //
 //});
 
-var Welcome = React.createClass({
+var Home = React.createClass({
   componentDidMount: function() {
     this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
     this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
@@ -144,14 +144,25 @@ var Welcome = React.createClass({
     this.props.updatePath(e.target.value);
   },
   render: function() {
-    return (
-      <div className="welcome">
-        <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
-        <input ref="fileDialog" type="file" className="hidden" />
-        <h5>{this.props.path}</h5>
-        <h4>Select a local Jekyll blog</h4>
-      </div>
-    );
+    var view = null;
+    if (this.props.blogDidLoad) {
+      view = (
+        <div>
+          <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
+          <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
+        </div>
+      );
+    } else {
+      view = (
+        <div className="home">
+          <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
+          <input ref="fileDialog" type="file" className="hidden" />
+          <h5>{this.props.path}</h5>
+          <h4>Select a local Jekyll blog</h4>
+        </div>
+      );
+    }
+    return <div>{view}</div>;
   }
 });
 
@@ -176,12 +187,6 @@ var Topbar = React.createClass({
   }
 });
 
-var Iframe = React.createClass({
-  render: function() {
-    return <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
-  }
-});
-
 var App = React.createClass({
   getInitialState: function() {
     return {
@@ -199,19 +204,11 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <Topbar
-          blogDidLoad={this.state.blogDidLoad}
-          editMode={this.state.editMode}
-        />
-        <Welcome
+        <Home
           blogDidLoad={this.state.blogDidLoad}
           editMode={this.state.editMode}
           updatePath={this.updatePath}
           path={this.state.path}
-        />
-        <Iframe
-          blogDidLoad={this.state.blogDidLoad}
-          editMode={this.state.editMode}
         />
       </div>
     );
