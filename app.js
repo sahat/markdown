@@ -3,7 +3,7 @@
 //var EventEmitter = require('events').EventEmitter;
 //var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
-//var fs = require('fs');
+var fs = require('fs');
 //var http = require('http');
 //var md = require('html-md');
 var _ = require('lodash');
@@ -161,15 +161,14 @@ var Home = React.createClass({
       console.log('child process exited with code ' + code);
     });
 
-    fs.readdir(path + '/_posts', function(err, files) {
+    var files = fs.readdirSync(e.target.value + '/_posts');
 
-      var posts = _.filter(files, function(file) {
-        var extension = file.split('.').pop();
-        return extension === 'md' || extension === 'markdown'
-      });
-
-      flow.emit('checkIfInEditMode', posts);
+    var posts = _.filter(files, function(file) {
+      var extension = file.split('.').pop();
+      return extension === 'md' || extension === 'markdown'
     });
+
+    this.props.updatePosts(posts);
   },
   render: function() {
     var view = null;
@@ -186,6 +185,7 @@ var Home = React.createClass({
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
           <h5>{this.props.path}</h5>
+          <h6>{this.props.posts}</h6>
           <h4>Select a local Jekyll blog</h4>
         </div>
       );
@@ -243,6 +243,7 @@ var App = React.createClass({
           updatePath={this.updatePath}
           updatePosts={this.updatePosts}
           path={this.state.path}
+          posts={this.state.posts}
         />
       </div>
     );
