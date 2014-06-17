@@ -131,15 +131,22 @@
 //});
 
 var Welcome = React.createClass({
-
+  componentDidMount: function() {
+    this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
+    this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+  },
   handleClick: function() {
     this.props.updatePath('C:/');
+    this.refs.fileDialog.getDOMNode().click();
+  },
+  updatePath: function() {
+    console.log(this);
   },
   render: function() {
     return (
       <div className="welcome">
-        <button id="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
-        <input type="file" className="hidden" id="fileDialog" nwdirectory />
+        <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
+        <input ref="fileDialog" type="file" className="" />
         <h5>{this.props.path}</h5>
         <h4>Select a local Jekyll blog</h4>
       </div>
