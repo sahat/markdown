@@ -144,7 +144,7 @@ var Welcome = React.createClass({
   }
 });
 
-var TopBar = React.createClass({
+var Topbar = React.createClass({
   render: function() {
     return (
       <div className="fixed">
@@ -152,11 +152,11 @@ var TopBar = React.createClass({
           <section className="top-bar-section">
             <ul className="left">
               <li id="newPost"><a href="#"><i className="fa fa-file"></i> New Post</a></li>
-              <li id="savePost" class="hidden"><a href="#"><i className="fa fa-database"></i> Save</a></li>
-              <li id="publishPost" class="hidden"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
+              <li id="savePost"><a href="#"><i className="fa fa-database"></i> Save</a></li>
+              <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
             </ul>
             <ul className="right">
-              <li id="closeBlog" className="hidden"><a href="#"><i className="fa fa-arrow-left"></i> Close Blog</a></li>
+              <li id="closeBlog"><a href="#"><i className="fa fa-arrow-left"></i> Back</a></li>
             </ul>
           </section>
         </nav>
@@ -165,20 +165,27 @@ var TopBar = React.createClass({
   }
 });
 
+var Iframe = React.createClass({
+  render: function() {
+    return <iframe src={this.props.url} width="100%" height="100%" frameborder="0"></iframe>
+  }
+});
+
 var App = React.createClass({
   getInitialState: function() {
     return {
       blogDidLoad: false,
       editMode: false,
-      title: 'Hello world',
+      path: '',
       posts: []
     }
   },
   render: function() {
     return (
       <div>
-        <TopBar />
+        <Topbar />
         <Welcome />
+        <Iframe />
       </div>
     );
   }
