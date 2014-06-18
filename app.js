@@ -138,9 +138,18 @@ var Home = React.createClass({
     }
   },
   componentDidMount: function() {
+    console.log('component mounted')
     if (!this.props.blogDidLoad) {
       this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
       this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+    }
+  },
+  componentDidUpdate: function() {
+    console.log('component updated');
+    if (this.props.blogDidLoad) {
+      console.log(this.refs.iframe.getDOMNode());
+      this.refs.iframe.getDOMNode().setAttribute('onload', 'getUrl()');
+
     }
   },
   handleBlogDidLoad: function(value) {
@@ -195,12 +204,14 @@ var Home = React.createClass({
     var win = gui.Window.get();
 
     win.on('close', function() {
-      alert('bye');
       jekyll.kill();
       this.close(true);
     });
 
     this.handleUpdatePosts(e.target.value);
+  },
+  getUrl: function() {
+
   },
   render: function() {
     var view = null;
@@ -210,7 +221,7 @@ var Home = React.createClass({
       view = (
         <div>
           <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
-          <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
+          <iframe ref="iframe" onLoad={this.getUrl} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
       );
     } else {
@@ -225,6 +236,30 @@ var Home = React.createClass({
     }
 
     return <div>{view}</div>;
+  }
+});
+
+var Frame = React.createClass({
+
+  render: function() {
+    return <iframe />
+  },
+  componentDidMount: function() {
+    this.renderFrameContent();
+  },
+  renderFrameContents: function() {
+    var doc = this.getDOMNode().contentDocument;
+    if (doc.readyState === 'complete') {
+      React.renderComponent(this.props.children, doc.body);
+    } else {
+      setTimeout(this.renderFrameContents, 0);
+    }
+  },
+  componentDidUpdate: function() {
+    this.renderFrameContents();
+  },
+  componentWillUnmount: function() {
+    React.unmountComponentAtNode(this.getDOMNode().contentDocument);
   }
 });
 
