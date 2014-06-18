@@ -230,21 +230,44 @@ var Home = React.createClass({
 
 var Topbar = React.createClass({
   render: function() {
+    var html = null;
+    if (this.props.editMode) {
+      html = (
+        <div className="fixed">
+          <nav className="top-bar">
+            <section className="top-bar-section">
+              <ul className="left">
+                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+                <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
+                <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
+              </ul>
+              <ul className="right">
+                <li id="closeBlog"><a href="#">Close</a></li>
+              </ul>
+            </section>
+          </nav>
+        </div>
+        );
+    } else {
+      html = (
+        <div className="fixed">
+          <nav className="top-bar">
+            <section className="top-bar-section">
+              <ul className="left">
+                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+              </ul>
+              <ul className="right">
+                <li id="closeBlog"><a href="#">Close</a></li>
+              </ul>
+            </section>
+          </nav>
+        </div>
+        );
+    }
+
+
     return (
-      <div className="fixed">
-        <nav className="top-bar">
-          <section className="top-bar-section">
-            <ul className="left">
-              <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-              <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
-              <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
-            </ul>
-            <ul className="right">
-              <li id="closeBlog"><a href="#">Close</a></li>
-            </ul>
-          </section>
-        </nav>
-      </div>
+      <div>{html}</div>
     );
   }
 });
