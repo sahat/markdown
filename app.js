@@ -142,10 +142,11 @@ var Home = React.createClass({
 
   },
   updatePath: function(e) {
-    console.log(e.target.value);
+    this.props.setLoading(true);
+
     this.props.updatePath(e.target.value);
 
-    jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
+    var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
     jekyll.stdout.once('data', function (data) {
       console.log('stdout: ' + data);
@@ -175,6 +176,9 @@ var Home = React.createClass({
     });
 
     this.props.updatePosts(posts);
+
+    this.props.setLoading(false);
+    // todo display loading indicator
   },
   render: function() {
     var view = null;
@@ -224,11 +228,17 @@ var Topbar = React.createClass({
 var App = React.createClass({
   getInitialState: function() {
     return {
+      isLoading: false,
       blogDidLoad: false,
       editMode: false,
       path: '',
       posts: []
     }
+  },
+  setLoading: function(value) {
+    this.setState({
+      isLoading: value
+    });
   },
   updatePath: function(path) {
     this.setState({
@@ -244,6 +254,8 @@ var App = React.createClass({
     return (
       <div>
         <Home
+          setLoading={this.setLoading}
+          isLoading={this.state.isLoading}
           blogDidLoad={this.state.blogDidLoad}
           editMode={this.state.editMode}
           updatePath={this.updatePath}
