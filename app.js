@@ -129,21 +129,29 @@ var gui = require('nw.gui');
 //
 //});
 
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var Home = React.createClass({
   componentDidMount: function() {
-    this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
-    this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+    if (!this.props.blogDidLoad) {
+      this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
+      this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+    }
   },
   handleClick: function() {
-    this.props.updatePath('C:/');
     this.refs.fileDialog.getDOMNode().click();
   },
-  updatePosts: function() {
+  handleUpdatePosts: function(path) {
+    var files = fs.readdirSync(path + '/_posts');
 
+    var posts = _.filter(files, function(file) {
+      var extension = file.split('.').pop();
+      return extension === 'md' || extension === 'markdown'
+    });
+
+    this.props.updatePosts(posts);
   },
   updatePath: function(e) {
-    this.props.setLoading(true);
-
     this.props.updatePath(e.target.value);
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
@@ -168,27 +176,19 @@ var Home = React.createClass({
       this.close(true);
     });
 
-    var files = fs.readdirSync(e.target.value + '/_posts');
+    this.handleUpdatePosts(e.target.value);
 
-    var posts = _.filter(files, function(file) {
-      var extension = file.split('.').pop();
-      return extension === 'md' || extension === 'markdown'
-    });
-
-    this.props.updatePosts(posts);
-
-    this.props.setLoading(false);
-    // todo display loading indicator
   },
   render: function() {
     var view = null;
+
     if (this.props.blogDidLoad) {
       view = (
         <div>
           <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
           <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
-      );
+        );
     } else {
       view = (
         <div className="home">
@@ -200,6 +200,7 @@ var Home = React.createClass({
         </div>
       );
     }
+
     return <div>{view}</div>;
   }
 });
@@ -228,17 +229,11 @@ var Topbar = React.createClass({
 var App = React.createClass({
   getInitialState: function() {
     return {
-      isLoading: false,
       blogDidLoad: false,
       editMode: false,
       path: '',
       posts: []
     }
-  },
-  setLoading: function(value) {
-    this.setState({
-      isLoading: value
-    });
   },
   updatePath: function(path) {
     this.setState({
@@ -254,8 +249,6 @@ var App = React.createClass({
     return (
       <div>
         <Home
-          setLoading={this.setLoading}
-          isLoading={this.state.isLoading}
           blogDidLoad={this.state.blogDidLoad}
           editMode={this.state.editMode}
           updatePath={this.updatePath}
