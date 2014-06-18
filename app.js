@@ -138,6 +138,9 @@ var Home = React.createClass({
       this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
     }
   },
+  handleBlogDidLoad: function(value) {
+    this.props.updateBlogDidLoad(value);
+  },
   handleClick: function() {
     this.refs.fileDialog.getDOMNode().click();
   },
@@ -157,8 +160,9 @@ var Home = React.createClass({
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
     jekyll.stdout.once('data', function (data) {
+      this.handleBlogDidLoad(true);
       console.log('stdout: ' + data);
-    });
+    }.bind(this));
     jekyll.stdout.on('data', function (data) {
       console.log('stdout: ' + data);
     });
@@ -177,18 +181,18 @@ var Home = React.createClass({
     });
 
     this.handleUpdatePosts(e.target.value);
-
   },
   render: function() {
     var view = null;
 
     if (this.props.blogDidLoad) {
+      document.body.classList.remove('cover');
       view = (
         <div>
           <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
           <iframe src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
-        );
+      );
     } else {
       view = (
         <div className="home">
@@ -232,6 +236,7 @@ var App = React.createClass({
       blogDidLoad: false,
       editMode: false,
       path: '',
+      url: 'http://localhost:4000',
       posts: []
     }
   },
@@ -245,15 +250,22 @@ var App = React.createClass({
       posts: posts
     });
   },
+  updateBlogDidLoad: function(value) {
+    this.setState({
+      blogDidLoad: value
+    })
+  },
   render: function() {
     return (
       <div>
         <Home
           blogDidLoad={this.state.blogDidLoad}
+          updateBlogDidLoad={this.updateBlogDidLoad}
           editMode={this.state.editMode}
           updatePath={this.updatePath}
           updatePosts={this.updatePosts}
           path={this.state.path}
+          url={this.state.url}
           posts={this.state.posts}
         />
       </div>
