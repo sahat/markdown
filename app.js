@@ -132,6 +132,11 @@ var gui = require('nw.gui');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Home = React.createClass({
+  getInitialState: function() {
+    return {
+      loading: ''
+    }
+  },
   componentDidMount: function() {
     if (!this.props.blogDidLoad) {
       this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
@@ -156,6 +161,10 @@ var Home = React.createClass({
   },
   updatePath: function(e) {
     this.props.updatePath(e.target.value);
+
+    this.setState({
+      loading: 'Loading...'
+    });
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
@@ -209,8 +218,7 @@ var Home = React.createClass({
         <div className="home">
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
-          <h5>{this.props.path}</h5>
-          <h6>{this.props.posts}</h6>
+          <h5>{this.state.loading}</h5>
           <h4>Select a local Jekyll blog</h4>
         </div>
       );
