@@ -5,7 +5,18 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 var http = require('http');
 var md = require('html-md');
+var Promise = require("bluebird");
 var gui = require('nw.gui');
+
+
+var ping = Promise.coroutine(function*() {
+  console.log("Ping?");
+  yield Promise.delay(3000);
+  console.log('waited 3 seconds');
+});
+
+ping();
+
 
 //var flow = new EventEmitter();
 //
@@ -131,29 +142,24 @@ var gui = require('nw.gui');
 
 
 var Home = React.createClass({
+
   componentDidMount: function() {
-    if (!this.props.blogDidLoad) {
-      console.log('blog not loaded');
-      this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
-      this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
-    } else {
-      console.log('blog loaded')
-    }
+    this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
+    this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
   },
+
   componentDidUpdate: function() {
     if (this.props.blogDidLoad) {
-      console.log('adding event listener');
       this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeLoaded, true);
-    } else {
-      console.log('blog not yet loaded');
     }
   },
   iframeLoaded: function() {
     console.log('calling');
     var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
-    console.log(path);
-    var url = url.replace(/\//g, '');
-    var posts = _.map(posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
+    var url = path.replace(/\//g, '');
+    console.log(url);
+    var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
+    console.log(posts);
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
@@ -212,7 +218,7 @@ var Home = React.createClass({
           <h6>{this.props.posts}</h6>
           <h4>Select a local Jekyll blog</h4>
         </div>
-        );
+      );
     }
 
     return <div>{view}</div>;
@@ -236,7 +242,7 @@ var Topbar = React.createClass({
           </section>
         </nav>
       </div>
-      );
+    );
   }
 });
 
