@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var fs = require('fs');
-
+var path = require('path');
 var _ = require('lodash');
 var http = require('http');
 var spawn = require('child_process').spawn;
@@ -196,8 +196,22 @@ var Home = React.createClass({
     this.handleUpdatePosts(e.target.value);
   },
   save: function() {
+    var postsDir = path.join(this.props.path, '_posts');
+    var location = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
+    var postSlug = location.replace(/\//g, '');
     var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
-    console.log(md(container.innerHTML, { inline:true }));
+    var markdown = md(container.innerHTML, { inline:true });
+    _.each(this.props.posts, function(postFile) {
+      if (postFile.match(postSlug)) {
+        console.log(postFile);
+        var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
+        file = file.split('---');
+        file[2] = markdown;
+        file.join('---');
+        fs.writeFileSync(path.join(postsDir, postFile), file);
+        console.log('File saved');
+      }
+    });
   },
   render: function() {
     var view = null;
