@@ -5,7 +5,6 @@ var fs = require('fs');
 var _ = require('lodash');
 var http = require('http');
 var spawn = require('child_process').spawn;
-var md = require('html-md');
 var Promise = require('bluebird');
 var gui = require('nw.gui');
 
@@ -196,6 +195,10 @@ var Home = React.createClass({
 
     this.handleUpdatePosts(e.target.value);
   },
+  save: function() {
+    var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
+    console.log(md(container.innerHTML, { inline:true }));
+  },
   render: function() {
     var view = null;
 
@@ -204,6 +207,7 @@ var Home = React.createClass({
       view = (
         <div>
           <Topbar
+            save={this.save}
             updateBlogDidLoad={this.props.updateBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
@@ -232,6 +236,9 @@ var Topbar = React.createClass({
     this.props.setEditMode(false);
     document.body.classList.add('cover');
   },
+  handleSaveClick: function(e) {
+    this.props.save();
+  },
   render: function() {
     var view = null;
     if (this.props.editMode) {
@@ -241,7 +248,7 @@ var Topbar = React.createClass({
             <section className="top-bar-section">
               <ul className="left">
                 <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-                <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
+                <li><a onClick={this.handleSaveClick} href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
                 <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
               </ul>
               <ul className="right">
