@@ -153,6 +153,10 @@ var Home = React.createClass({
     console.log(posts);
     if (_.contains(posts, url)) {
       this.props.setEditMode(true);
+
+
+      var editor = new Pen(this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0]);
+
     }
   },
   handleBlogDidLoad: function(value) {
@@ -200,6 +204,7 @@ var Home = React.createClass({
       view = (
         <div>
           <Topbar
+            updateBlogDidLoad={this.props.updateBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
@@ -212,8 +217,6 @@ var Home = React.createClass({
         <div className="home">
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
-          <h5>{this.props.path}</h5>
-          <h6>{this.props.posts}</h6>
           <h4>Select a local Jekyll blog</h4>
         </div>
       );
@@ -226,7 +229,8 @@ var Home = React.createClass({
 var Topbar = React.createClass({
   handleCloseBlogClick: function(e) {
     this.props.updateBlogDidLoad(false);
-    this.props.update
+    this.props.setEditMode(false);
+    document.body.classList.add('cover');
   },
   render: function() {
     var view = null;
