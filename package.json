@@ -12,11 +12,12 @@
     "toolbar": true
   },
   "chromium-args": "--child-clean-exit",
+  "js-flags": "--harmony",
   "scripts": {
     "test": "jest"
   },
   "dependencies": {
-    "bluebird": "^2.1.1",
+    "bluebird": "^2.1.3",
     "html-md": "^3.0.2",
     "jquery": "^2.1.1",
     "lodash": "^2.4.1"
