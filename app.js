@@ -153,9 +153,9 @@ var Home = React.createClass({
     console.log(posts);
     if (_.contains(posts, url)) {
       this.props.setEditMode(true);
-
-
-      var editor = new Pen(this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0]);
+      var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
+      container.style = 'outline: none';
+      var editor = new Pen(container);
 
     }
   },
