@@ -152,7 +152,7 @@ var Home = React.createClass({
     var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
     console.log(posts);
     if (_.contains(posts, url)) {
-      this.props.enterEditMode();
+      this.props.setEditMode(true);
     }
   },
   handleBlogDidLoad: function(value) {
@@ -199,7 +199,11 @@ var Home = React.createClass({
       document.body.classList.remove('cover');
       view = (
         <div>
-          <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
+          <Topbar
+            blogDidLoad={this.props.blogDidLoad}
+            setEditMode={this.props.setEditMode}
+            editMode={this.props.editMode}
+          />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
         );
@@ -220,6 +224,10 @@ var Home = React.createClass({
 });
 
 var Topbar = React.createClass({
+  handleCloseBlogClick: function(e) {
+    this.props.updateBlogDidLoad(false);
+    this.props.update
+  },
   render: function() {
     var view = null;
     if (this.props.editMode) {
@@ -233,7 +241,7 @@ var Topbar = React.createClass({
                 <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
               </ul>
               <ul className="right">
-                <li id="closeBlog"><a href="#">Close</a></li>
+                <li><a onClick={this.handleCloseBlogClick} href="#">Close</a></li>
               </ul>
             </section>
           </nav>
@@ -284,16 +292,16 @@ var App = React.createClass({
       blogDidLoad: value
     })
   },
-  enterEditMode: function() {
+  setEditMode: function(value) {
     this.setState({
-      editMode: true
+      editMode: value
     });
   },
   render: function() {
     return (
       <div>
         <Home
-          enterEditMode={this.enterEditMode}
+          setEditMode={this.setEditMode}
           blogDidLoad={this.state.blogDidLoad}
           updateBlogDidLoad={this.updateBlogDidLoad}
           editMode={this.state.editMode}
