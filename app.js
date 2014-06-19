@@ -129,28 +129,29 @@ var gui = require('nw.gui');
 //
 //});
 
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Home = React.createClass({
-  getInitialState: function() {
-    return {
-      loading: ''
-    }
-  },
   componentDidMount: function() {
-    console.log('component mounted')
     if (!this.props.blogDidLoad) {
+      console.log('blog not loaded');
       this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
       this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+    } else {
+      console.log('blog loaded')
     }
   },
   componentDidUpdate: function() {
-    console.log('component updated');
     if (this.props.blogDidLoad) {
-      console.log(this.refs.iframe.getDOMNode());
-      this.refs.iframe.getDOMNode().setAttribute('onload', 'getUrl()');
-
+      console.log('adding event listener');
+      this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeLoaded, true);
+    } else {
+      console.log('blog not yet loaded');
     }
+  },
+  iframeLoaded: function() {
+    console.log('calling');
+    var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
+    console.log(path);
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
@@ -170,10 +171,6 @@ var Home = React.createClass({
   },
   updatePath: function(e) {
     this.props.updatePath(e.target.value);
-
-    this.setState({
-      loading: 'Loading...'
-    });
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
@@ -204,14 +201,12 @@ var Home = React.createClass({
     var win = gui.Window.get();
 
     win.on('close', function() {
+      alert('bye');
       jekyll.kill();
       this.close(true);
     });
 
     this.handleUpdatePosts(e.target.value);
-  },
-  getUrl: function() {
-
   },
   render: function() {
     var view = null;
@@ -221,89 +216,43 @@ var Home = React.createClass({
       view = (
         <div>
           <Topbar blogDidLoad={this.props.blogDidLoad} editMode={this.props.editMode} />
-          <iframe ref="iframe" onLoad={this.getUrl} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
+          <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
-      );
+        );
     } else {
       view = (
         <div className="home">
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
-          <h5>{this.state.loading}</h5>
+          <h5>{this.props.path}</h5>
+          <h6>{this.props.posts}</h6>
           <h4>Select a local Jekyll blog</h4>
         </div>
-      );
+        );
     }
 
     return <div>{view}</div>;
   }
 });
 
-var Frame = React.createClass({
-
-  render: function() {
-    return <iframe />
-  },
-  componentDidMount: function() {
-    this.renderFrameContent();
-  },
-  renderFrameContents: function() {
-    var doc = this.getDOMNode().contentDocument;
-    if (doc.readyState === 'complete') {
-      React.renderComponent(this.props.children, doc.body);
-    } else {
-      setTimeout(this.renderFrameContents, 0);
-    }
-  },
-  componentDidUpdate: function() {
-    this.renderFrameContents();
-  },
-  componentWillUnmount: function() {
-    React.unmountComponentAtNode(this.getDOMNode().contentDocument);
-  }
-});
-
 var Topbar = React.createClass({
   render: function() {
-    var html = null;
-    if (this.props.editMode) {
-      html = (
-        <div className="fixed">
-          <nav className="top-bar">
-            <section className="top-bar-section">
-              <ul className="left">
-                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-                <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
-                <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
-              </ul>
-              <ul className="right">
-                <li id="closeBlog"><a href="#">Close</a></li>
-              </ul>
-            </section>
-          </nav>
-        </div>
-        );
-    } else {
-      html = (
-        <div className="fixed">
-          <nav className="top-bar">
-            <section className="top-bar-section">
-              <ul className="left">
-                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-              </ul>
-              <ul className="right">
-                <li id="closeBlog"><a href="#">Close</a></li>
-              </ul>
-            </section>
-          </nav>
-        </div>
-        );
-    }
-
-
     return (
-      <div>{html}</div>
-    );
+      <div className="fixed">
+        <nav className="top-bar">
+          <section className="top-bar-section">
+            <ul className="left">
+              <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+              <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
+              <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
+            </ul>
+            <ul className="right">
+              <li id="closeBlog"><a href="#">Close</a></li>
+            </ul>
+          </section>
+        </nav>
+      </div>
+      );
   }
 });
 
@@ -336,17 +285,17 @@ var App = React.createClass({
     return (
       <div>
         <Home
-          blogDidLoad={this.state.blogDidLoad}
-          updateBlogDidLoad={this.updateBlogDidLoad}
-          editMode={this.state.editMode}
-          updatePath={this.updatePath}
-          updatePosts={this.updatePosts}
-          path={this.state.path}
-          url={this.state.url}
-          posts={this.state.posts}
+        blogDidLoad={this.state.blogDidLoad}
+        updateBlogDidLoad={this.updateBlogDidLoad}
+        editMode={this.state.editMode}
+        updatePath={this.updatePath}
+        updatePosts={this.updatePosts}
+        path={this.state.path}
+        url={this.state.url}
+        posts={this.state.posts}
         />
       </div>
-    );
+      );
   }
 });
 
