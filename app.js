@@ -152,6 +152,8 @@ var Home = React.createClass({
     console.log('calling');
     var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
     console.log(path);
+    var url = url.replace(/\//g, '');
+    var posts = _.map(posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
@@ -174,36 +176,18 @@ var Home = React.createClass({
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
-    jekyll.stdout.once('data', function (data) {
-      console.log('stdout: ' + data);
-    }.bind(this));
     jekyll.stdout.on('data', function (data) {
-      var target = 'Server running...';
-      var target2 = 'Address already in use';
       var line = data.toString();
-      if (line.match(target) && line.match(target).length) {
-        this.handleBlogDidLoad(true);
-      } else if (line.match(target2) && line.match(target2).length) {
+      var serverRunning = 'Server running...';
+      var portInUse = 'Address already in use';
+      if (line.match(serverRunning) && line.match(serverRunning).length ||
+        line.match(portInUse) && line.match(portInUse).length) {
         this.handleBlogDidLoad(true);
       }
     }.bind(this));
-    jekyll.stderr.on('data', function (data) {
-      console.log('stderr: ' + data);
-    });
-    jekyll.on('close', function (code) {
-      console.log('child process exited with code ' + code);
-    });
 
     process.on('exit', function() {
       jekyll.kill();
-    });
-
-    var win = gui.Window.get();
-
-    win.on('close', function() {
-      alert('bye');
-      jekyll.kill();
-      this.close(true);
     });
 
     this.handleUpdatePosts(e.target.value);
