@@ -1,22 +1,13 @@
 /** @jsx React.DOM */
 
-var _ = require('lodash');
-var spawn = require('child_process').spawn;
 var fs = require('fs');
+
+var _ = require('lodash');
 var http = require('http');
+var spawn = require('child_process').spawn;
 var md = require('html-md');
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 var gui = require('nw.gui');
-
-
-var ping = Promise.coroutine(function*() {
-  console.log("Ping?");
-  yield Promise.delay(3000);
-  console.log('waited 3 seconds');
-});
-
-ping();
-
 
 //var flow = new EventEmitter();
 //
@@ -160,6 +151,9 @@ var Home = React.createClass({
     console.log(url);
     var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
     console.log(posts);
+    if (_.contains(posts, url)) {
+      this.props.enterEditMode();
+    }
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
@@ -227,22 +221,41 @@ var Home = React.createClass({
 
 var Topbar = React.createClass({
   render: function() {
-    return (
-      <div className="fixed">
-        <nav className="top-bar">
-          <section className="top-bar-section">
-            <ul className="left">
-              <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-              <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
-              <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
-            </ul>
-            <ul className="right">
-              <li id="closeBlog"><a href="#">Close</a></li>
-            </ul>
-          </section>
-        </nav>
-      </div>
-    );
+    var view = null;
+    if (this.props.editMode) {
+      view = (
+        <div className="fixed">
+          <nav className="top-bar">
+            <section className="top-bar-section">
+              <ul className="left">
+                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+                <li id="savePost"><a href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
+                <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
+              </ul>
+              <ul className="right">
+                <li id="closeBlog"><a href="#">Close</a></li>
+              </ul>
+            </section>
+          </nav>
+        </div>
+      );
+    } else {
+      view = (
+        <div className="fixed">
+          <nav className="top-bar">
+            <section className="top-bar-section">
+              <ul className="left">
+                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
+              </ul>
+              <ul className="right">
+                <li id="closeBlog"><a href="#">Close</a></li>
+              </ul>
+            </section>
+          </nav>
+        </div>
+      );
+    }
+    return <div>{view}</div>;
   }
 });
 
@@ -271,21 +284,27 @@ var App = React.createClass({
       blogDidLoad: value
     })
   },
+  enterEditMode: function() {
+    this.setState({
+      editMode: true
+    });
+  },
   render: function() {
     return (
       <div>
         <Home
-        blogDidLoad={this.state.blogDidLoad}
-        updateBlogDidLoad={this.updateBlogDidLoad}
-        editMode={this.state.editMode}
-        updatePath={this.updatePath}
-        updatePosts={this.updatePosts}
-        path={this.state.path}
-        url={this.state.url}
-        posts={this.state.posts}
+          enterEditMode={this.enterEditMode}
+          blogDidLoad={this.state.blogDidLoad}
+          updateBlogDidLoad={this.updateBlogDidLoad}
+          editMode={this.state.editMode}
+          updatePath={this.updatePath}
+          updatePosts={this.updatePosts}
+          path={this.state.path}
+          url={this.state.url}
+          posts={this.state.posts}
         />
       </div>
-      );
+    );
   }
 });
 
