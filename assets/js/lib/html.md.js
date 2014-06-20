@@ -113,7 +113,7 @@
               case"I":
               case"U":
               case"VAR":
-                this.output("_"), this.atNoWS = !0, b = this.outputLater("_");
+                this.output("*"), this.atNoWS = !0, b = this.outputLater("*");
                 break;
               case"DT":
               case"B":
