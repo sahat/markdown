@@ -80,15 +80,12 @@ var Home = React.createClass({
     var markdown = md(container.innerHTML, { inline:true });
     _.each(this.props.posts, function(postFile) {
       if (postFile.match(postSlug)) {
-        console.log(postFile);
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
-        window.file = file;
-        window.markdown = markdown;
-        file = file.split('---');
-        file[2] = markdown;
-        file = file.join('---');
-        console.log(file);
-        fs.writeFileSync(path.join(postsDir, postFile), file);
+        var yaml = file.split('---').slice(0,2);
+        yaml.push('');
+        yaml = yaml.join('---');
+        fs.writeFileSync(path.join(postsDir, postFile), yaml);
+        fs.appendFileSync(path.join(postsDir, postFile), markdown);
         console.log('File saved');
       }
     });
