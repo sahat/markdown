@@ -34,7 +34,7 @@ var Home = React.createClass({
       var editor = new Pen(container);
 
     }
-    this.refs.myIframe.getDOMNode().contentWindow.document.onkeyup = this.handleKeyUp;
+    this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
