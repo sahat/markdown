@@ -36,94 +36,41 @@ button {
 }
 
 .btn.outline {
-  color: #fff;
-  background: 0 0px;
-  border: 2px solid rgba(255,255,255,0.3);
-  padding: 10 23px;
+  padding: 10px 23px;
   font-size: 13px;
   font-weight: 700px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  border-radius: 5px;
   line-height: 25px;
+  color: #fff;
+  text-transform: uppercase;
+  background: 0 0;
+  border: 2px solid rgba(255,255,255,.3);
+  letter-spacing: .08em;
+  border-radius: 5px;
 
   &:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,.3);
   }
 }
 
 .home {
-  text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 50%;
   height: 50%;
-  overflow: auto;
   margin: auto;
   margin-top: 230px;
-  position: absolute;
-  top: 0px; left: 0px; bottom: 0px; right: 0px;
+  overflow: auto;
+  text-align: center;
 
   h1, h2, h3, h4, h5, h6 {
-    color: #fff;
     font-weight: 300;
-    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    text-shadow: 0 1px 16px rgba(0,0,0,.5), 0 0 1px rgba(0,0,0,.5);
   }
 }
-
-.navigation {
-  width: 200px;
-  text-transform: uppercase;
-  float: right;
-}
-
-.navigation ul {
-  background-color: #37383a;
-  cursor: pointer;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-
-.navigation .header {
-  padding: 15px;
-  background-color: #4e5053;
-}
-
-.navigation li {
-  padding: 15px;
-}
-
-.navigation .selected {
-  background-color: #9061b2;
-}
-
-.score {
-  font-size: 36px;
-  margin: 15px;
-  color: #afb3b9;
-}
-
-.title {
-  font-size: 18px;
-}
-
-.title a {
-  text-decoration: none;
-  color: #fff;
-}
-
-.author {
-  font-size: 16px;
-}
-
-/**
- * Changed to a <b> because React wraps text nodes in
- * <span> elements if they have non-text-node siblings.
- */
-.author b {
-  color: #afb3b9;
-}
-
 
 /*------------------------------------*\
     TOPBAR
@@ -153,13 +100,11 @@ button {
   src: url('../fonts/entypo.woff');
 }
 
-[class^='icon-'],
-[class*=' icon-'] {
-  font-family: 'Entypo';
-  color: #b4bac1;
+[class^='icon-'] {
   padding: 0 14.66667px;
-  font-size: 3.4em;
+  font: 3.4em 'Entypo';
   line-height: 44px;
+  color: #b4bac1;
   cursor: pointer;
 }
 
