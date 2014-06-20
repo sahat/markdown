@@ -34,6 +34,7 @@ var Home = React.createClass({
       var editor = new Pen(container);
 
     }
+    this.refs.myIframe.getDOMNode().contentWindow.document.onkeyup = this.handleKeyUp;
   },
   handleBlogDidLoad: function(value) {
     this.props.updateBlogDidLoad(value);
@@ -82,13 +83,16 @@ var Home = React.createClass({
       if (postFile.match(postSlug)) {
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
         var yaml = file.split('---').slice(0,2);
-        yaml.push('');
+        yaml.push('\n\n');
         yaml = yaml.join('---');
         fs.writeFileSync(path.join(postsDir, postFile), yaml);
         fs.appendFileSync(path.join(postsDir, postFile), markdown);
         console.log('File saved');
       }
     });
+  },
+  handleKeyUp: function(e) {
+    console.log('keyup' + e)
   },
   render: function() {
     var view = null;
@@ -104,7 +108,7 @@ var Home = React.createClass({
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
           />
-          <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
+          <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
         );
     } else {
@@ -178,6 +182,9 @@ var App = React.createClass({
       url: 'http://localhost:4000',
       posts: []
     }
+  },
+  componentDidMount: function() {
+    console.log('app loaded')
   },
   updatePath: function(path) {
     this.setState({
