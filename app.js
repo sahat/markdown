@@ -105,6 +105,7 @@ var Home = React.createClass({
     var postSlug = location.replace(/\//g, '');
     var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
     var markdown = md(container.innerHTML, { inline:true });
+    markdown = markdown.replace('’', '\'');
     _.each(this.props.posts, function(postFile) {
       if (postFile.match(postSlug)) {
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
