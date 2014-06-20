@@ -7,7 +7,7 @@
  * FONT-FACE...........Import brand font files
  */
 
-$topbar-height: 44px;
+$topbar-height: 45px;
 $topbar-bg: rgba(34,34,34,.93);
 
 @import "lib/foundation";
@@ -17,7 +17,7 @@ $topbar-bg: rgba(34,34,34,.93);
 
 
 body {
-  padding-top: 44px;
+  padding-top: 45px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -76,12 +76,12 @@ button {
     TOPBAR
 \*------------------------------------*/
 
-
 .top-bar-section ul li {
+  padding: 0 15px;
   font-size: 0.8125rem;
+  line-height: 45px;
+  color: #b4bac1;
 }
-
-
 
 
 
@@ -90,18 +90,19 @@ button {
 /*------------------------------------*\
     ICONS
 \*------------------------------------*/
+
 @font-face {
   font-family: 'Entypo';
   src: url('../fonts/entypo.woff');
 }
 
 [class^='icon-'] {
-  padding: 0 14.66667px;
   font: 3.4em 'Entypo';
   line-height: 44px;
   color: #b4bac1;
   cursor: pointer;
   transition: color .2s ease-in;
+  -webkit-user-select: none;
 
   &:hover {
     color: #fff;
