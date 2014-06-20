@@ -1,11 +1,33 @@
-$topbar-height: 30px;
+$topbar-height: 44px;
+$topbar-bg: rgba(34,34,34,0.93);
 $topbar-bg: #000;
 $button-bg: #000;
 
 
 @import "lib/foundation";
-@import "lib/font-awesome/font-awesome";
 @import "utilities";
+
+@font-face {
+  font-family: 'Entypo';
+  src: url('../fonts/entypo.woff');
+}
+
+.top-bar {
+  transition: color .2s ease-in;
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  font-family: 'Entypo';
+  cursor: pointer;
+  font-size: 3.4em;
+  line-height: 1;
+}
+
+.icon-home:before {
+  content: '\2302;';
+}
+
 
 body {
   padding-top: 30px;
