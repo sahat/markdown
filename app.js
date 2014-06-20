@@ -86,9 +86,9 @@ var Home = React.createClass({
         window.markdown = markdown;
         file = file.split('---');
         file[2] = markdown;
-        file.join('---');
+        file = file.join('---');
         console.log(file);
-//        fs.writeFileSync(path.join(postsDir, postFile), file);
+        fs.writeFileSync(path.join(postsDir, postFile), file);
         console.log('File saved');
       }
     });
