@@ -1,32 +1,20 @@
+/*------------------------------------*\
+    $CONTENTS
+\*------------------------------------*/
+/**
+ * CONTENTS............You’re reading it!
+ * RESET...............Set our reset defaults
+ * FONT-FACE...........Import brand font files
+ */
+
 $topbar-height: 44px;
 $topbar-bg: rgba(34,34,34,0.93);
-$topbar-bg: #000;
 $button-bg: #000;
-
 
 @import "lib/foundation";
 @import "utilities";
 
-@font-face {
-  font-family: 'Entypo';
-  src: url('../fonts/entypo.woff');
-}
 
-.top-bar {
-  transition: color .2s ease-in;
-}
-
-[class^='icon-'],
-[class*=' icon-'] {
-  font-family: 'Entypo';
-  cursor: pointer;
-  font-size: 3.4em;
-  line-height: 1;
-}
-
-.icon-home:before {
-  content: '\2302;';
-}
 
 
 body {
@@ -136,3 +124,35 @@ button {
 .author b {
   color: #afb3b9;
 }
+
+.top-bar {
+  transition: color .2s ease-in;
+}
+
+
+
+
+/*------------------------------------*\
+    $ICONS
+\*------------------------------------*/
+@font-face {
+  font-family: 'Entypo';
+  src: url('../fonts/entypo.woff');
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  font-family: 'Entypo';
+  color: #b4bac1;
+  cursor: pointer;
+  font-size: 3.4em;
+  line-height: 1;
+}
+
+.icon-new:before { content: '\E003'; }
+.icon-home:before { content: '\2302'; }
+.icon-save:before { content: '\1F4BE'; }
+.icon-save:before { content: '\1F4BE'; }
+.icon-publish:before { content: '\1F4E4'; }
+.icon-settings:before { content: '\2692'; }
+
