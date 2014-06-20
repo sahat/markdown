@@ -36,25 +36,30 @@ var Home = React.createClass({
       // pen.js file
       var script = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('script');
       script.type = 'text/javascript';
+
       script.onload = function(){
         console.log('pen loaded inside iframe');
-      };
+
+        // instantiate pen
+        var scriptInline = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('script');
+        scriptInline.type = 'text/javascript';
+        scriptInline.text = 'var editor = new Pen(document.getElementsByClassName("post-content")[0]);';
+        this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(scriptInline);
+
+      }.bind(this);
+
       script.src = 'file://' + this.state.appPath + '/assets/js/lib/pen.js';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(script);
 
-      // instantiate pen
-      var scriptInline = document.createElement('script');
-      scriptInline.type = 'text/javascript';
-      scriptInline.text = 'var editor = new Pen(container);';
-      this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(scriptInline);
 
       // pen styles
-      var cssLink = document.createElement('link');
+      var cssLink = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('link');
       cssLink.href = 'file://' + this.state.appPath + '/assets/css/lib/pen.css';
       cssLink.rel = 'stylesheet';
       cssLink.type = 'text/css';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(cssLink);
     }
+
     this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
   handleBlogDidLoad: function(value) {
