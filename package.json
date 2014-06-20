@@ -1,6 +1,7 @@
 {
   "name": "nw-demo",
   "main": "index.html",
+  "node-remote": "localhost",
   "version": "0.0.1",
   "single-instance": true,
   "window": {
