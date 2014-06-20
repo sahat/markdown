@@ -8,8 +8,7 @@
  */
 
 $topbar-height: 44px;
-$topbar-bg: rgba(34,34,34,0.93);
-$button-bg: #000;
+$topbar-bg: rgba(34,34,34,.93);
 
 @import "lib/foundation";
 @import "utilities";
@@ -18,7 +17,7 @@ $button-bg: #000;
 
 
 body {
-  padding-top: 30px;
+  padding-top: 44px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -125,15 +124,29 @@ button {
   color: #afb3b9;
 }
 
-.top-bar {
+
+/*------------------------------------*\
+    TOPBAR
+\*------------------------------------*/
+
+
+.top-bar-section ul li {
+  font-size: 0.8125rem;
   transition: color .2s ease-in;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 
 
 
+
+
+
 /*------------------------------------*\
-    $ICONS
+    ICONS
 \*------------------------------------*/
 @font-face {
   font-family: 'Entypo';
@@ -144,9 +157,10 @@ button {
 [class*=' icon-'] {
   font-family: 'Entypo';
   color: #b4bac1;
-  cursor: pointer;
+  padding: 0 14.66667px;
   font-size: 3.4em;
-  line-height: 1;
+  line-height: 44px;
+  cursor: pointer;
 }
 
 .icon-new:before { content: '\E003'; }
