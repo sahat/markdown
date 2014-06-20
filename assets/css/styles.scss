@@ -79,11 +79,6 @@ button {
 
 .top-bar-section ul li {
   font-size: 0.8125rem;
-  transition: color .2s ease-in;
-
-  &:hover {
-    color: #fff;
-  }
 }
 
 
@@ -106,6 +101,11 @@ button {
   line-height: 44px;
   color: #b4bac1;
   cursor: pointer;
+  transition: color .2s ease-in;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .icon-new:before { content: '\E003'; }
