@@ -152,7 +152,7 @@ var Home = React.createClass({
   }
 });
 
-var Topbar = React.createClass({
+var TopbarLinks = React.createClass({
   handleCloseBlogClick: function(e) {
     this.props.updateBlogDidLoad(false);
     this.props.setEditMode(false);
@@ -162,41 +162,53 @@ var Topbar = React.createClass({
     this.props.save();
   },
   render: function() {
-    var view = null;
-    if (this.props.editMode) {
-      view = (
-        <div className="fixed">
-          <nav className="top-bar">
-            <section className="top-bar-section">
-              <ul className="left">
-                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-                <li><a onClick={this.handleSaveClick} href="#"><i className="fa fa-floppy-o"></i> Save</a></li>
-                <li id="publishPost"><a href="#"><i className="fa fa-github"></i> Publish</a></li>
-              </ul>
-              <ul className="right">
-                <li><a onClick={this.handleCloseBlogClick} href="#">Close</a></li>
-              </ul>
-            </section>
-          </nav>
-        </div>
+    if (this.props.isEditMode) {
+      return (
+        <section className="top-bar-section">
+          <ul className="left">
+            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
+            <li onClick={this.handleSaveClick}><span className="icon-save"></span></li>
+            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
+          </ul>
+          <ul className="right">
+            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
+            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+          </ul>
+        </section>
       );
     } else {
-      view = (
-        <div className="fixed">
-          <nav className="top-bar">
-            <section className="top-bar-section">
-              <ul className="left">
-                <li id="newPost"><a href="#"><i className="fa fa-file-text"></i> New Post</a></li>
-              </ul>
-              <ul className="right">
-                <li id="closeBlog"><a href="#">Close</a></li>
-              </ul>
-            </section>
-          </nav>
-        </div>
+      return (
+        <section className="top-bar-section">
+          <ul className="left">
+            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
+            <li onClick={this.handleSaveClick}><span className="icon-save"></span></li>
+            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
+          </ul>
+          <ul className="right">
+            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
+            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+          </ul>
+        </section>
       );
     }
-    return <div>{view}</div>;
+  }
+});
+
+var Topbar = React.createClass({
+  render: function() {
+    return (
+      <div className="fixed">
+        <nav className="top-bar">
+          <TopbarLinks
+            save={this.save}
+            updateBlogDidLoad={this.props.updateBlogDidLoad}
+            blogDidLoad={this.props.blogDidLoad}
+            setEditMode={this.props.setEditMode}
+            editMode={this.props.editMode}
+          />
+        </nav>
+      </div>
+    );
   }
 });
 
