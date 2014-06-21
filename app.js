@@ -120,17 +120,18 @@ var Home = React.createClass({
   },
   handleKeyUp: function(e) {
     console.log('keyup' + e)
-      this.props.save();
+      this.save();
 
       this.setState({
         savingText: 'Saving...'
       });
 
+
       setTimeout(function() {
         this.setState({
           savingText: ''
         });
-      }.bind(this), 1000);
+      }.bind(this), 1450);
   },
   render: function() {
     var view = null;
@@ -167,11 +168,11 @@ var Home = React.createClass({
 
 var Topbar = React.createClass({
   render: function() {
+
     return (
       <div className="fixed">
         <nav className="top-bar">
           <TopbarLinks
-            save={this.save}
             savingText={this.props.savingText}
             updateBlogDidLoad={this.props.updateBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
@@ -191,14 +192,14 @@ var TopbarLinks = React.createClass({
     document.body.classList.add('cover');
   },
   render: function() {
-
-    if (this.props.isEditMode) {
+    if (this.props.editMode) {
+      console.log('in edit mode');
       return (
         <section className="top-bar-section">
           <ul className="left">
             <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
             <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
-            {savingText}
+            <li>{this.props.savingText}</li>
           </ul>
           <ul className="right">
             <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
@@ -207,6 +208,7 @@ var TopbarLinks = React.createClass({
         </section>
         );
     } else {
+      console.log('not in edit mode');
       return (
         <section className="top-bar-section">
           <ul className="left">
