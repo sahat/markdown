@@ -17,6 +17,9 @@ var Home = React.createClass({
   componentDidMount: function() {
     this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
     this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+
+    this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
+    this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
   },
   componentDidUpdate: function() {
     if (this.props.blogDidLoad) {
@@ -150,6 +153,7 @@ var Home = React.createClass({
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
+            path={this.props.path}
           />
           <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
@@ -157,8 +161,8 @@ var Home = React.createClass({
     } else {
       return (
         <div className="home">
-          <video autoplay="" loop="">
-            <source src="assets/video/PeacefulFlow.webm" type="video/webm" />
+          <video ref="motionLoop">
+            <source src="assets/video/16189_2.webm" type="video/webm" />
           </video>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
@@ -182,6 +186,7 @@ var Topbar = React.createClass({
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
+            path={this.props.path}
           />
         </nav>
       </div>
@@ -196,10 +201,12 @@ var TopbarLinks = React.createClass({
     document.body.classList.add('cover');
   },
   render: function() {
+    var blogName = this.props.path.split('/').slice(-1).toString();
+
     if (this.props.editMode) {
-      console.log('in edit mode');
       return (
         <section className="top-bar-section">
+          <h1 className="title"><strong>{blogName}</strong></h1>
           <ul className="left">
             <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
             <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
@@ -215,6 +222,7 @@ var TopbarLinks = React.createClass({
       console.log('not in edit mode');
       return (
         <section className="top-bar-section">
+          <h1 className="title"><strong>{blogName}</strong></h1>
           <ul className="left">
             <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
           </ul>

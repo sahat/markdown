@@ -72,15 +72,41 @@ button {
   }
 }
 
+video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  background-size: cover;
+}
+
 /*------------------------------------*\
     TOPBAR
 \*------------------------------------*/
 
 .top-bar-section ul li {
+  position: relative;
   padding: 0 15px;
   font-size: 0.8125rem;
-  line-height: 45px;
+  line-height: $topbar-height;
   color: #b4bac1;
+  background: transparent;
+}
+
+.title {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  margin: auto;
+  font-size: 0.8125rem;
+  color: #b4bac1;
+  line-height: $topbar-height;
+  -webkit-user-select: none;
 }
 
 
