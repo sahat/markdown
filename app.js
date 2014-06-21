@@ -139,11 +139,9 @@ var Home = React.createClass({
       }.bind(this), 1450);
   },
   render: function() {
-    var view = null;
-
     if (this.props.blogDidLoad) {
       document.body.classList.remove('cover');
-      view = (
+      return (
         <div>
           <Topbar
             save={this.save}
@@ -155,18 +153,19 @@ var Home = React.createClass({
           />
           <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
-        );
+      );
     } else {
-      view = (
+      return (
         <div className="home">
+          <video autoplay="" loop="">
+            <source src="assets/video/PeacefulFlow.webm" type="video/webm" />
+          </video>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
           <h4>Select a local Jekyll blog</h4>
         </div>
       );
     }
-
-    return <div>{view}</div>;
   }
 });
 
@@ -241,6 +240,7 @@ var App = React.createClass({
   },
   componentDidMount: function() {
     console.log('app loaded...')
+
   },
   updatePath: function(path) {
     this.setState({
