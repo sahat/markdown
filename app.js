@@ -5,13 +5,13 @@ var path = require('path');
 var _ = require('lodash');
 var http = require('http');
 var spawn = require('child_process').spawn;
-var Promise = require('bluebird');
 var gui = require('nw.gui');
 
 var Home = React.createClass({
   getInitialState: function() {
     return {
-      appPath: window.location.pathname.split('/').slice(0,-1).join('/')
+      appPath: window.location.pathname.split('/').slice(0,-1).join('/'),
+      savingText: ''
     }
   },
   componentDidMount: function() {
@@ -120,6 +120,17 @@ var Home = React.createClass({
   },
   handleKeyUp: function(e) {
     console.log('keyup' + e)
+      this.props.save();
+
+      this.setState({
+        savingText: 'Saving...'
+      });
+
+      setTimeout(function() {
+        this.setState({
+          savingText: ''
+        });
+      }.bind(this), 1000);
   },
   render: function() {
     var view = null;
@@ -130,6 +141,7 @@ var Home = React.createClass({
         <div>
           <Topbar
             save={this.save}
+            savingText={this.state.savingText}
             updateBlogDidLoad={this.props.updateBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
@@ -152,47 +164,6 @@ var Home = React.createClass({
   }
 });
 
-var TopbarLinks = React.createClass({
-  handleCloseBlogClick: function(e) {
-    this.props.updateBlogDidLoad(false);
-    this.props.setEditMode(false);
-    document.body.classList.add('cover');
-  },
-  handleSaveClick: function(e) {
-    this.props.save();
-  },
-  render: function() {
-    if (this.props.isEditMode) {
-      return (
-        <section className="top-bar-section">
-          <ul className="left">
-            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
-            <li onClick={this.handleSaveClick}><span className="icon-save"></span></li>
-            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
-          </ul>
-          <ul className="right">
-            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
-            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
-          </ul>
-        </section>
-      );
-    } else {
-      return (
-        <section className="top-bar-section">
-          <ul className="left">
-            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
-            <li onClick={this.handleSaveClick}><span className="icon-save"></span></li>
-            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
-          </ul>
-          <ul className="right">
-            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
-            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
-          </ul>
-        </section>
-      );
-    }
-  }
-});
 
 var Topbar = React.createClass({
   render: function() {
@@ -201,6 +172,7 @@ var Topbar = React.createClass({
         <nav className="top-bar">
           <TopbarLinks
             save={this.save}
+            savingText={this.props.savingText}
             updateBlogDidLoad={this.props.updateBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
@@ -209,6 +181,44 @@ var Topbar = React.createClass({
         </nav>
       </div>
     );
+  }
+});
+
+var TopbarLinks = React.createClass({
+  handleHomeClick: function(e) {
+    this.props.updateBlogDidLoad(false);
+    this.props.setEditMode(false);
+    document.body.classList.add('cover');
+  },
+  render: function() {
+
+    if (this.props.isEditMode) {
+      return (
+        <section className="top-bar-section">
+          <ul className="left">
+            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
+            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
+            {savingText}
+          </ul>
+          <ul className="right">
+            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
+            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+          </ul>
+        </section>
+        );
+    } else {
+      return (
+        <section className="top-bar-section">
+          <ul className="left">
+            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
+          </ul>
+          <ul className="right">
+            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
+            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+          </ul>
+        </section>
+        );
+    }
   }
 });
 
@@ -223,7 +233,7 @@ var App = React.createClass({
     }
   },
   componentDidMount: function() {
-    console.log('app loaded')
+    console.log('app loaded...')
   },
   updatePath: function(path) {
     this.setState({
@@ -268,3 +278,14 @@ React.renderComponent(
   <App />,
   document.body
 );
+
+// ========================
+// Live Reload
+// ========================
+
+var loc = './';
+
+fs.watch(loc, function() {
+  if (location)
+    location.reload();
+});
