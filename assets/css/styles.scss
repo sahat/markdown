@@ -7,14 +7,14 @@
  * FONT-FACE...........Import brand font files
  */
 
-$topbar-height: 45px;
+$topbar-height: 40px;
 $topbar-bg: rgba(34,34,34,.93);
 
 @import "lib/foundation";
 @import "utilities";
 
 body {
-  padding-top: 45px;
+  padding-top: $topbar-height;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -121,7 +121,7 @@ video {
 
 [class^='icon-'] {
   font: 3.4em 'Entypo';
-  line-height: 44px;
+  line-height: $topbar-height;
   color: #b4bac1;
   cursor: pointer;
   transition: color .2s ease-in;
