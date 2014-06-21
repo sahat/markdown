@@ -165,6 +165,7 @@ var Home = React.createClass({
           <video ref="motionLoop">
             <source src="assets/video/PeacefulFlow.webm" type="video/webm" />
           </video>
+          <h1>Jekyll Blog Editor</h1>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
           <h4>Select a local Jekyll blog</h4>
