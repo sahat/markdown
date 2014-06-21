@@ -119,6 +119,11 @@ var Home = React.createClass({
     });
   },
   handleKeyUp: function(e) {
+    if (e.keyCode == '37' || e.keyCode == '38' ||
+      e.keyCode == '39' || e.keyCode == '40') {
+      return false;
+    }
+
     console.log('keyup' + e)
       this.save();
 
