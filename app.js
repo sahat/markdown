@@ -31,6 +31,7 @@ var Home = React.createClass({
     var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
     var url = path.replace(/\//g, '');
     var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
+
     if (_.contains(posts, url)) {
       this.props.setEditMode(true);
       var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
@@ -162,7 +163,7 @@ var Home = React.createClass({
       return (
         <div className="home">
           <video ref="motionLoop">
-            <source src="assets/video/16189_2.webm" type="video/webm" />
+            <source src="assets/video/17855_2.webm" type="video/webm" />
           </video>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
@@ -195,6 +196,14 @@ var Topbar = React.createClass({
 });
 
 var TopbarLinks = React.createClass({
+  componentDidMount: function() {
+    console.log('topbarlinks mounted')
+    $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
+  },
+  componentDidUpdate: function() {
+    console.log('topbarlinks updated')
+    $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
+  },
   handleHomeClick: function(e) {
     this.props.updateBlogDidLoad(false);
     this.props.setEditMode(false);
@@ -208,13 +217,21 @@ var TopbarLinks = React.createClass({
         <section className="top-bar-section">
           <h1 className="title"><strong>{blogName}</strong></h1>
           <ul className="left">
-            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
-            <li onClick={this.handlePublishClick}><span className="icon-publish"></span></li>
+            <li onClick={this.handleNewClick}>
+              <span rel="tipsy" className="icon-new" title="New"></span>
+            </li>
+            <li onClick={this.handlePublishClick}>
+              <span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span>
+            </li>
             <li>{this.props.savingText}</li>
           </ul>
           <ul className="right">
-            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
-            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+            <li onClick={this.handleSettingsClick}>
+              <span rel="tipsy" className="icon-settings" title="Settings"></span>
+            </li>
+            <li onClick={this.handleHomeClick}>
+              <span rel="tipsy" className="icon-home" title="Home"></span>
+            </li>
           </ul>
         </section>
         );
@@ -224,12 +241,19 @@ var TopbarLinks = React.createClass({
         <section className="top-bar-section">
           <h1 className="title"><strong>{blogName}</strong></h1>
           <ul className="left">
-            <li onClick={this.handleNewClick}><span className="icon-new"></span></li>
+            <li onClick={this.handleNewClick}>
+              <span rel="tipsy" className="icon-new" title="New"></span>
+            </li>
           </ul>
           <ul className="right">
-            <li onClick={this.handleSettingsClick}><span className="icon-settings"></span></li>
-            <li onClick={this.handleHomeClick}><span className="icon-home"></span></li>
+            <li onClick={this.handleSettingsClick}>
+              <span rel="tipsy" className="icon-settings" title="Settings"></span>
+            </li>
+            <li onClick={this.handleHomeClick}>
+              <span rel="tipsy" className="icon-home" title="Home"></span>
+            </li>
           </ul>
+
         </section>
         );
     }
