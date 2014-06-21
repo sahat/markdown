@@ -170,7 +170,11 @@
           that.menu().highlight();
         } else {
           //hide menu
-          that._menu.style.display = 'none';
+          that._menu.style.opacity = 0;
+          that._menu.style.marginTop = '-2px';
+          setTimeout(function() {
+            that._menu.style.display = 'none';
+          }, 250)
         }
       }, 200);
     };
@@ -339,7 +343,8 @@
     menu.style.display = 'block';
     menu.style.top = top - menu.clientHeight + 'px';
     menu.style.left = left - (menu.clientWidth/2) + 'px';
-
+    menu.style.opacity = 0.9;
+    menu.style.marginTop = '2px';
     return this;
   };
 

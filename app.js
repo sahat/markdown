@@ -32,8 +32,14 @@ var Home = React.createClass({
     var url = path.replace(/\//g, '');
     var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
 
+    // compensate for topbar
+//    this.refs.myIframe.getDOMNode().contentWindow.document.body.style.marginTop = '40px';
+
+
     if (_.contains(posts, url)) {
       this.props.setEditMode(true);
+
+
       var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
       container.style.outline = 'none';
 
@@ -49,8 +55,9 @@ var Home = React.createClass({
         scriptInline.type = 'text/javascript';
         scriptInline.text = 'var editor = new Pen(document.getElementsByClassName("post-content")[0]);';
         this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(scriptInline);
-
       }.bind(this);
+
+
 
       script.src = 'file://' + this.state.appPath + '/assets/js/lib/pen.js';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(script);
