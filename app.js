@@ -163,7 +163,7 @@ var Home = React.createClass({
       return (
         <div className="home">
           <video ref="motionLoop">
-            <source src="assets/video/17855_2.webm" type="video/webm" />
+            <source src="assets/video/PeacefulFlow.webm" type="video/webm" />
           </video>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
@@ -215,7 +215,7 @@ var TopbarLinks = React.createClass({
     if (this.props.editMode) {
       return (
         <section className="top-bar-section">
-          <h1 className="title"><strong>{blogName}</strong></h1>
+          <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
           <ul className="left">
             <li onClick={this.handleNewClick}>
               <span rel="tipsy" className="icon-new" title="New"></span>
@@ -239,7 +239,7 @@ var TopbarLinks = React.createClass({
       console.log('not in edit mode');
       return (
         <section className="top-bar-section">
-          <h1 className="title"><strong>{blogName}</strong></h1>
+          <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
           <ul className="left">
             <li onClick={this.handleNewClick}>
               <span rel="tipsy" className="icon-new" title="New"></span>

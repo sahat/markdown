@@ -103,7 +103,12 @@ video {
   font-size: 0.8125rem;
   color: #b4bac1;
   line-height: $topbar-height;
+  transition: color .2s ease-in;
   -webkit-user-select: none;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 
