@@ -224,31 +224,11 @@ var Home = React.createClass({
 
 
 var Topbar = React.createClass({
-  render: function() {
-
-    return (
-      <div className="fixed">
-        <nav className="top-bar">
-          <TopbarLinks
-            savingText={this.props.savingText}
-            setBlogDidLoad={this.props.setBlogDidLoad}
-            blogDidLoad={this.props.blogDidLoad}
-            setEditMode={this.props.setEditMode}
-            editMode={this.props.editMode}
-            path={this.props.path}
-          />
-        </nav>
-      </div>
-    );
-  }
-});
-
-var TopbarLinks = React.createClass({
   componentDidMount: function() {
-    $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
+    $('span[rel=tipsy]').tipsy({ fade: true });
   },
   componentDidUpdate: function() {
-    $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
+    $('span[rel=tipsy]').tipsy({ fade: true });
   },
   handleHome: function() {
     this.props.setBlogDidLoad(false);
@@ -270,18 +250,22 @@ var TopbarLinks = React.createClass({
     }
     var blogName = this.props.path.split('/').slice(-1).toString();
     return (
-      <section className="top-bar-section">
-        <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
-        <ul className="left">
-          <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
-          {publishLink}
-          {savingText}
-        </ul>
-        <ul className="right">
-          <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
-          <li onClick={this.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
-        </ul>
-      </section>
+      <div className="fixed">
+        <nav className="top-bar">
+          <section className="top-bar-section">
+            <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
+            <ul className="left">
+              <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
+              {publishLink}
+              {savingText}
+            </ul>
+            <ul className="right">
+              <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
+              <li onClick={this.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
+            </ul>
+          </section>
+        </nav>
+      </div>
     );
   }
 });
