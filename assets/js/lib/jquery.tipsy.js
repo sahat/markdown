@@ -82,7 +82,7 @@
         
         hide: function() {
             if (this.options.fade) {
-                this.tip().stop().fadeOut(function() { $(this).remove(); });
+                this.tip().stop().fadeOut(200, function() { $(this).remove(); });
             } else {
                 this.tip().remove();
             }
