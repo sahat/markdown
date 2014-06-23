@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 
+var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
-var _ = require('lodash');
 var http = require('http');
 var spawn = require('child_process').spawn;
 var gui = require('nw.gui');
@@ -16,7 +16,7 @@ var Home = React.createClass({
   },
   componentDidMount: function() {
     this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
-    this.refs.fileDialog.getDOMNode().addEventListener('change', this.updatePath);
+    this.refs.fileDialog.getDOMNode().addEventListener('change', this.setPath);
 
     this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
     this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
@@ -74,12 +74,12 @@ var Home = React.createClass({
     this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
   handleBlogDidLoad: function(value) {
-    this.props.updateBlogDidLoad(value);
+    this.props.setBlogDidLoad(value);
   },
   handleClick: function() {
     this.refs.fileDialog.getDOMNode().click();
   },
-  handleUpdatePosts: function(path) {
+  handlesetPosts: function(path) {
     var files = fs.readdirSync(path + '/_posts');
 
     var posts = _.filter(files, function(file) {
@@ -87,10 +87,10 @@ var Home = React.createClass({
       return extension === 'md' || extension === 'markdown'
     });
 
-    this.props.updatePosts(posts);
+    this.props.setPosts(posts);
   },
-  updatePath: function(e) {
-    this.props.updatePath(e.target.value);
+  setPath: function(e) {
+    this.props.setPath(e.target.value);
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
@@ -108,7 +108,7 @@ var Home = React.createClass({
       jekyll.kill();
     });
 
-    this.handleUpdatePosts(e.target.value);
+    this.handlesetPosts(e.target.value);
   },
   save: function() {
     var postsDir = path.join(this.props.path, '_posts');
@@ -157,7 +157,7 @@ var Home = React.createClass({
           <Topbar
             save={this.save}
             savingText={this.state.savingText}
-            updateBlogDidLoad={this.props.updateBlogDidLoad}
+            setBlogDidLoad={this.props.setBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
@@ -170,7 +170,7 @@ var Home = React.createClass({
       return (
         <div className="home">
           <video ref="motionLoop">
-            <source src="assets/video/PeacefulFlow.webm" type="video/webm" />
+            <source src="assets/video/videohive_glossy-silver.webmhd.webm" type="video/webm" />
           </video>
           <h1>Jekyll Blog Editor</h1>
           <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
@@ -191,7 +191,7 @@ var Topbar = React.createClass({
         <nav className="top-bar">
           <TopbarLinks
             savingText={this.props.savingText}
-            updateBlogDidLoad={this.props.updateBlogDidLoad}
+            setBlogDidLoad={this.props.setBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
             setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
@@ -213,7 +213,7 @@ var TopbarLinks = React.createClass({
     $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
   },
   handleHomeClick: function(e) {
-    this.props.updateBlogDidLoad(false);
+    this.props.setBlogDidLoad(false);
     this.props.setEditMode(false);
     document.body.classList.add('cover');
   },
@@ -221,50 +221,35 @@ var TopbarLinks = React.createClass({
     var blogName = this.props.path.split('/').slice(-1).toString();
 
     if (this.props.editMode) {
-      return (
-        <section className="top-bar-section">
-          <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
-          <ul className="left">
-            <li onClick={this.handleNewClick}>
-              <span rel="tipsy" className="icon-new" title="New"></span>
-            </li>
-            <li onClick={this.handlePublishClick}>
-              <span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span>
-            </li>
-            <li>{this.props.savingText}</li>
-          </ul>
-          <ul className="right">
-            <li onClick={this.handleSettingsClick}>
-              <span rel="tipsy" className="icon-settings" title="Settings"></span>
-            </li>
-            <li onClick={this.handleHomeClick}>
-              <span rel="tipsy" className="icon-home" title="Home"></span>
-            </li>
-          </ul>
-        </section>
-        );
-    } else {
-      console.log('not in edit mode');
-      return (
-        <section className="top-bar-section">
-          <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
-          <ul className="left">
-            <li onClick={this.handleNewClick}>
-              <span rel="tipsy" className="icon-new" title="New"></span>
-            </li>
-          </ul>
-          <ul className="right">
-            <li onClick={this.handleSettingsClick}>
-              <span rel="tipsy" className="icon-settings" title="Settings"></span>
-            </li>
-            <li onClick={this.handleHomeClick}>
-              <span rel="tipsy" className="icon-home" title="Home"></span>
-            </li>
-          </ul>
-
-        </section>
-        );
+      var publishLink = (
+        <li onClick={this.handlePublishClick}>
+          <span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span>
+        </li>
+      );
     }
+
+    var savingText = <li>{this.props.savingText}</li>;
+
+    return (
+      <section className="top-bar-section">
+        <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
+        <ul className="left">
+          <li onClick={this.handleNewClick}>
+            <span rel="tipsy" className="icon-new" title="New"></span>
+          </li>
+          {publishLink}
+          {savingText}
+        </ul>
+        <ul className="right">
+          <li onClick={this.handleSettingsClick}>
+            <span rel="tipsy" className="icon-settings" title="Settings"></span>
+          </li>
+          <li onClick={this.handleHomeClick}>
+            <span rel="tipsy" className="icon-home" title="Home"></span>
+          </li>
+        </ul>
+      </section>
+    );
   }
 });
 
@@ -274,25 +259,25 @@ var App = React.createClass({
       blogDidLoad: false,
       editMode: false,
       path: '',
-      url: 'http://localhost:4000',
-      posts: []
+      posts: [],
+      url: 'http://localhost:4000'
     }
   },
   componentDidMount: function() {
     console.log('app loaded...')
 
   },
-  updatePath: function(path) {
+  setPath: function(path) {
     this.setState({
       path: path
     });
   },
-  updatePosts: function(posts) {
+  setPosts: function(posts) {
     this.setState({
       posts: posts
     });
   },
-  updateBlogDidLoad: function(value) {
+  setBlogDidLoad: function(value) {
     this.setState({
       blogDidLoad: value
     })
@@ -304,27 +289,22 @@ var App = React.createClass({
   },
   render: function() {
     return (
-      <div>
-        <Home
-          setEditMode={this.setEditMode}
-          blogDidLoad={this.state.blogDidLoad}
-          updateBlogDidLoad={this.updateBlogDidLoad}
-          editMode={this.state.editMode}
-          updatePath={this.updatePath}
-          updatePosts={this.updatePosts}
-          path={this.state.path}
-          url={this.state.url}
-          posts={this.state.posts}
-        />
-      </div>
+      <Home
+        url={this.state.url}
+        posts={this.state.posts}
+        editMode={this.state.editMode}
+        blogDidLoad={this.state.blogDidLoad}
+        path={this.state.path}
+        setEditMode={this.setEditMode}
+        setBlogDidLoad={this.setBlogDidLoad}
+        setPath={this.setPath}
+        setPosts={this.setPosts}
+      />
     );
   }
 });
 
-React.renderComponent(
-  <App />,
-  document.body
-);
+React.renderComponent(<App />, document.body);
 
 // ========================
 // Live Reload
