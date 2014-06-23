@@ -164,11 +164,10 @@ var Home = React.createClass({
     if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
       return false;
     }
-    this.handleSave();
+    var self = this;
     this.setState({ savingText: 'Saving...' });
-    setTimeout(function() {
-      this.setState({ savingText: '' });
-    }.bind(this), 1000);
+    this.handleSave();
+    _.delay(function() { self.setState({ savingText: '' }); }, 1000);
   },
   render: function() {
     if (this.props.blogDidLoad) {
