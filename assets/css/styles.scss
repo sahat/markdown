@@ -8,7 +8,7 @@
  */
 
 $topbar-height: 40px;
-$topbar-bg: #222;
+$topbar-bg: #2e2e2e;
 
 @import "lib/foundation";
 @import "utilities";
@@ -149,7 +149,7 @@ video {
 .icon-settings:before { content: '\2692'; }
 
 .tipsy {
-  font-size: 10px;
+  font-size: 11px;
   position: absolute;
   padding: 5px;
   z-index: 100000;
@@ -157,21 +157,18 @@ video {
 
 .tipsy-inner {
   background-color: #222;
-  color: #FFF;
+  color: #fff;
   max-width: 200px;
   padding: 5px 8px 4px 8px;
   text-align: center;
 }
 
-/* Rounded corners */
 .tipsy-inner {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  border-radius: 2px;
 }
 
 /* Uncomment for shadow */
-/*.tipsy-inner { box-shadow: 0 0 5px #222000; -webkit-box-shadow: 0 0 5px #222000; -moz-box-shadow: 0 0 5px #222000; }*/
+//.tipsy-inner { box-shadow: 0 0 5px #222000; }
 
 .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #222; }
 
