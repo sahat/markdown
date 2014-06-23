@@ -48,7 +48,6 @@ var App = React.createClass({
 var Home = React.createClass({
   getInitialState: function() {
     return {
-      appPath: window.location.pathname.split('/').slice(0,-1).join('/'),
       savingText: ''
     }
   },
@@ -61,22 +60,18 @@ var Home = React.createClass({
   },
   componentDidUpdate: function() {
     if (this.props.blogDidLoad) {
-      this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeLoaded, true);
+      this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeDidLoad, true);
     }
   },
-  iframeLoaded: function() {
-    console.log('calling');
+  iframeDidLoad: function() {
+    var appLocalPath = window.location.pathname.split('/').slice(0,-1).join('/');
+
     var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
     var url = path.replace(/\//g, '');
     var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
 
-    // compensate for topbar
-//    this.refs.myIframe.getDOMNode().contentWindow.document.body.style.marginTop = '40px';
-
-
     if (_.contains(posts, url)) {
       this.props.setEditMode(true);
-
 
       var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
       container.style.outline = 'none';
@@ -95,15 +90,12 @@ var Home = React.createClass({
         this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(scriptInline);
       }.bind(this);
 
-
-
-      script.src = 'file://' + this.state.appPath + '/assets/js/lib/pen.js';
+      script.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(script);
-
 
       // pen styles
       var cssLink = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('link');
-      cssLink.href = 'file://' + this.state.appPath + '/assets/css/lib/pen.css';
+      cssLink.href = 'file://' + appLocalPath + '/assets/css/lib/pen.css';
       cssLink.rel = 'stylesheet';
       cssLink.type = 'text/css';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(cssLink);
@@ -180,17 +172,16 @@ var Home = React.createClass({
   },
   render: function() {
     if (this.props.blogDidLoad) {
-      document.body.classList.remove('cover');
       return (
         <div>
           <Topbar
             handleSave={this.handleSave}
             savingText={this.state.savingText}
-            setBlogDidLoad={this.props.setBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
-            setEditMode={this.props.setEditMode}
             editMode={this.props.editMode}
             path={this.props.path}
+            setBlogDidLoad={this.props.setBlogDidLoad}
+            setEditMode={this.props.setEditMode}
           />
           <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
