@@ -113,11 +113,7 @@ var Home = React.createClass({
   },
   handleBlogDidLoad: function(value) {
     console.log('changing blog load value to ' + value);
-
-    var valueLink = this.linkState('blogDidLoad');
-
-    console.log(valueLink)
-//    this.props.setBlogDidLoad(value);
+    this.props.setBlogDidLoad(value);
   },
   handleClick: function() {
     this.refs.fileDialog.getDOMNode().click();
@@ -184,7 +180,6 @@ var Home = React.createClass({
       this.setState({
         savingText: 'Saving...'
       });
-
 
       setTimeout(function() {
         this.setState({
@@ -260,36 +255,34 @@ var TopbarLinks = React.createClass({
     this.props.setEditMode(false);
     document.body.classList.add('cover');
   },
+  handlePublish: function() {
+    console.log('clicked on publish link');
+  },
+  handleNewPost: function() {
+    console.log('clicked on new post link');
+  },
+  handleSettings: function() {
+    console.log('clicked on settings link');
+  },
   render: function() {
     var blogName = this.props.path.split('/').slice(-1).toString();
 
     if (this.props.editMode) {
-      var publishLink = (
-        <li onClick={this.handlePublishClick}>
-          <span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span>
-        </li>
-      );
+      var publishLink = <li onClick={this.handlePublish}><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
+      var savingText = <li>{this.props.savingText}</li>;
     }
-
-    var savingText = <li>{this.props.savingText}</li>;
 
     return (
       <section className="top-bar-section">
         <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
         <ul className="left">
-          <li onClick={this.handleNewClick}>
-            <span rel="tipsy" className="icon-new" title="New"></span>
-          </li>
+          <li onClick={this.handleNewClick}><span rel="tipsy" className="icon-new" title="New"></span></li>
           {publishLink}
           {savingText}
         </ul>
         <ul className="right">
-          <li onClick={this.handleSettingsClick}>
-            <span rel="tipsy" className="icon-settings" title="Settings"></span>
-          </li>
-          <li onClick={this.handleHomeClick}>
-            <span rel="tipsy" className="icon-home" title="Home"></span>
-          </li>
+          <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
+          <li onClick={this.handleHomeClick}><span rel="tipsy" className="icon-home" title="Home"></span></li>
         </ul>
       </section>
     );
