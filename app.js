@@ -36,8 +36,8 @@ var App = React.createClass({
         editMode={this.state.editMode}
         blogDidLoad={this.state.blogDidLoad}
         path={this.state.path}
-        setEditMode={this.setEditMode}
         setBlogDidLoad={this.setBlogDidLoad}
+        setEditMode={this.setEditMode}
         setPath={this.setPath}
         setPosts={this.setPosts}
       />
@@ -149,7 +149,7 @@ var Home = React.createClass({
 
     this.handlesetPosts(e.target.value);
   },
-  save: function() {
+  handleSave: function() {
     var postsDir = path.join(this.props.path, '_posts');
     var location = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
     var postSlug = location.replace(/\//g, '');
@@ -169,25 +169,14 @@ var Home = React.createClass({
     });
   },
   handleKeyUp: function(e) {
-
-    // Ignore arrow keys
-    if (e.keyCode == '37' || e.keyCode == '38' ||
-      e.keyCode == '39' || e.keyCode == '40') {
+    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
       return false;
     }
-
-    console.log('keyup' + e)
-      this.save();
-
-      this.setState({
-        savingText: 'Saving...'
-      });
-
-      setTimeout(function() {
-        this.setState({
-          savingText: ''
-        });
-      }.bind(this), 1000);
+    this.handleSave();
+    this.setState({ savingText: 'Saving...' });
+    setTimeout(function() {
+      this.setState({ savingText: '' });
+    }.bind(this), 1000);
   },
   render: function() {
     if (this.props.blogDidLoad) {
@@ -195,7 +184,7 @@ var Home = React.createClass({
       return (
         <div>
           <Topbar
-            save={this.save}
+            handleSave={this.handleSave}
             savingText={this.state.savingText}
             setBlogDidLoad={this.props.setBlogDidLoad}
             blogDidLoad={this.props.blogDidLoad}
