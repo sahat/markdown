@@ -11,7 +11,7 @@ var App = React.createClass({
     return {
       blogDidLoad: false,
       editMode: false,
-      path: '',
+      blogPath: '',
       posts: [],
       url: 'http://localhost:4000'
     }
@@ -35,7 +35,7 @@ var App = React.createClass({
         posts={this.state.posts}
         editMode={this.state.editMode}
         blogDidLoad={this.state.blogDidLoad}
-        path={this.state.path}
+        blogPath={this.state.blogPath}
         setBlogDidLoad={this.setBlogDidLoad}
         setEditMode={this.setEditMode}
         setPath={this.setPath}
@@ -142,7 +142,7 @@ var Home = React.createClass({
     this.handlesetPosts(e.target.value);
   },
   handleSave: function() {
-    var postsDir = path.join(this.props.path, '_posts');
+    var postsDir = path.join(this.props.blogPath, '_posts');
     var location = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
     var postSlug = location.replace(/\//g, '');
     var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
@@ -179,7 +179,7 @@ var Home = React.createClass({
             savingText={this.state.savingText}
             blogDidLoad={this.props.blogDidLoad}
             editMode={this.props.editMode}
-            path={this.props.path}
+            blogPath={this.props.blogPath}
             setBlogDidLoad={this.props.setBlogDidLoad}
             setEditMode={this.props.setEditMode}
           />
@@ -228,12 +228,12 @@ var Topbar = React.createClass({
       var publishLink = <li onClick={this.handlePublish}><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
       var savingText = <li>{this.props.savingText}</li>;
     }
-    var blogName = this.props.path.split('/').slice(-1).toString();
+    var blogName = this.props.blogPath.split('/').slice(-1).toString();
     return (
       <div className="fixed">
         <nav className="top-bar">
           <section className="top-bar-section">
-            <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
+            <span rel="tipsy" className="title" title={this.props.blogPath}><strong>{blogName}</strong></span>
             <ul className="left">
               <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
               {publishLink}
