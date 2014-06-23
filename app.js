@@ -169,6 +169,8 @@ var Home = React.createClass({
     });
   },
   handleKeyUp: function(e) {
+
+    // Ignore arrow keys
     if (e.keyCode == '37' || e.keyCode == '38' ||
       e.keyCode == '39' || e.keyCode == '40') {
       return false;
@@ -185,7 +187,7 @@ var Home = React.createClass({
         this.setState({
           savingText: ''
         });
-      }.bind(this), 1450);
+      }.bind(this), 1000);
   },
   render: function() {
     if (this.props.blogDidLoad) {
@@ -243,46 +245,41 @@ var Topbar = React.createClass({
 
 var TopbarLinks = React.createClass({
   componentDidMount: function() {
-    console.log('topbarlinks mounted')
     $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
   },
   componentDidUpdate: function() {
-    console.log('topbarlinks updated')
     $('span[rel=tipsy]').tipsy({ fade: true, gravity: 'n' });
   },
-  handleHomeClick: function(e) {
+  handleHome: function() {
     this.props.setBlogDidLoad(false);
     this.props.setEditMode(false);
-    document.body.classList.add('cover');
   },
   handlePublish: function() {
-    console.log('clicked on publish link');
+
   },
   handleNewPost: function() {
-    console.log('clicked on new post link');
+
   },
   handleSettings: function() {
-    console.log('clicked on settings link');
+
   },
   render: function() {
-    var blogName = this.props.path.split('/').slice(-1).toString();
-
     if (this.props.editMode) {
       var publishLink = <li onClick={this.handlePublish}><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
       var savingText = <li>{this.props.savingText}</li>;
     }
-
+    var blogName = this.props.path.split('/').slice(-1).toString();
     return (
       <section className="top-bar-section">
         <span rel="tipsy" className="title" title={this.props.path}><strong>{blogName}</strong></span>
         <ul className="left">
-          <li onClick={this.handleNewClick}><span rel="tipsy" className="icon-new" title="New"></span></li>
+          <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
           {publishLink}
           {savingText}
         </ul>
         <ul className="right">
           <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
-          <li onClick={this.handleHomeClick}><span rel="tipsy" className="icon-home" title="Home"></span></li>
+          <li onClick={this.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
         </ul>
       </section>
     );
