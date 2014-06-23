@@ -5,7 +5,45 @@ var fs = require('fs');
 var path = require('path');
 var http = require('http');
 var spawn = require('child_process').spawn;
-var gui = require('nw.gui');
+
+var App = React.createClass({
+  getInitialState: function() {
+    return {
+      blogDidLoad: false,
+      editMode: false,
+      path: '',
+      posts: [],
+      url: 'http://localhost:4000'
+    }
+  },
+  setPath: function(path) {
+    this.setState({ path: path });
+  },
+  setPosts: function(posts) {
+    this.setState({ posts: posts });
+  },
+  setBlogDidLoad: function(value) {
+    this.setState({ blogDidLoad: value })
+  },
+  setEditMode: function(value) {
+    this.setState({ editMode: value });
+  },
+  render: function() {
+    return (
+      <Home
+        url={this.state.url}
+        posts={this.state.posts}
+        editMode={this.state.editMode}
+        blogDidLoad={this.state.blogDidLoad}
+        path={this.state.path}
+        setEditMode={this.setEditMode}
+        setBlogDidLoad={this.setBlogDidLoad}
+        setPath={this.setPath}
+        setPosts={this.setPosts}
+      />
+    );
+  }
+});
 
 var Home = React.createClass({
   getInitialState: function() {
@@ -74,7 +112,12 @@ var Home = React.createClass({
     this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
   handleBlogDidLoad: function(value) {
-    this.props.setBlogDidLoad(value);
+    console.log('changing blog load value to ' + value);
+
+    var valueLink = this.linkState('blogDidLoad');
+
+    console.log(valueLink)
+//    this.props.setBlogDidLoad(value);
   },
   handleClick: function() {
     this.refs.fileDialog.getDOMNode().click();
@@ -253,66 +296,16 @@ var TopbarLinks = React.createClass({
   }
 });
 
-var App = React.createClass({
-  getInitialState: function() {
-    return {
-      blogDidLoad: false,
-      editMode: false,
-      path: '',
-      posts: [],
-      url: 'http://localhost:4000'
-    }
-  },
-  componentDidMount: function() {
-    console.log('app loaded...')
-
-  },
-  setPath: function(path) {
-    this.setState({
-      path: path
-    });
-  },
-  setPosts: function(posts) {
-    this.setState({
-      posts: posts
-    });
-  },
-  setBlogDidLoad: function(value) {
-    this.setState({
-      blogDidLoad: value
-    })
-  },
-  setEditMode: function(value) {
-    this.setState({
-      editMode: value
-    });
-  },
-  render: function() {
-    return (
-      <Home
-        url={this.state.url}
-        posts={this.state.posts}
-        editMode={this.state.editMode}
-        blogDidLoad={this.state.blogDidLoad}
-        path={this.state.path}
-        setEditMode={this.setEditMode}
-        setBlogDidLoad={this.setBlogDidLoad}
-        setPath={this.setPath}
-        setPosts={this.setPosts}
-      />
-    );
-  }
-});
-
 React.renderComponent(<App />, document.body);
 
 // ========================
-// Live Reload
+// Node Webkit Live Reload
 // ========================
 
 var loc = './';
 
 fs.watch(loc, function() {
-  if (location)
+  if (location) {
     location.reload();
+  }
 });
