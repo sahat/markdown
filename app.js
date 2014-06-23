@@ -52,15 +52,19 @@ var Home = React.createClass({
     }
   },
   componentDidMount: function() {
-    this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
     this.refs.fileDialog.getDOMNode().addEventListener('change', this.setPath);
-
+    this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
     this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
     this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
   },
   componentDidUpdate: function() {
     if (this.props.blogDidLoad) {
       this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeDidLoad, true);
+    } else {
+      this.refs.fileDialog.getDOMNode().addEventListener('change', this.setPath);
+      this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
+      this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
+      this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
     }
   },
   iframeDidLoad: function() {
