@@ -73,7 +73,11 @@ var Home = React.createClass({
     var jsPen = iframe.document.createElement('script');
     jsPen.onload = function() {
       var initPen = iframe.document.createElement('script');
-      initPen.text = 'var editor = new Pen(document.querySelector(".post-content"));';
+        var options = '{' +
+        'editor: document.querySelector(".post-content"),' +
+        'list: ["blockquote", "bold", "italic", "createlink", "outdent"]' +
+      '}';
+      initPen.text = 'var editor = new Pen(' + options + ');';
       iframe.document.querySelector('head').appendChild(initPen);
     };
     jsPen.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
