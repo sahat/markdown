@@ -106,8 +106,7 @@ var Home = React.createClass({
     } else {
       this.props.setEditMode(false);
     }
-//    this.setState({ blogBaseUrl: iframe.location.origin });
-    iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 550), true);
+    iframe.document.addEventListener('DOMSubtreeModified', _.debounce(this.handleDomChange, 550), true);
   },
   blogDidLoad: function(value) {
     console.log('changing blog load value to ' + value);
@@ -170,10 +169,7 @@ var Home = React.createClass({
     var iframe = this.refs.myIframe.getDOMNode().contentWindow;
     iframe.location = iframe.location.origin;
   },
-  handleKeyUp: function(e) {
-    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
-      return false;
-    }
+  handleDomChange: function(e) {
     var self = this;
     this.setState({ savingText: 'Saving...' });
     this.handleSave();
