@@ -67,8 +67,15 @@ var Home = React.createClass({
       this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
     }
   },
-  injectScripts: function() {
-
+  injectScripts: function(iframe, appLocalPath) {
+    var jsPen = iframe.document.createElement('script');
+    jsPen.onload = function() {
+      var initPen = iframe.document.createElement('script');
+      initPen.text = 'var editor = new Pen(document.querySelector(".post-content"));';
+      iframe.document.querySelector('head').appendChild(initPen);
+    };
+    jsPen.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
+    iframe.document.querySelector('head').appendChild(jsPen);
   },
   injectStyles: function(iframe, appLocalPath) {
     var editArea = iframe.document.querySelector('.post-content');
@@ -82,34 +89,16 @@ var Home = React.createClass({
   iframeDidLoad: function() {
     var iframe = this.refs.myIframe.getDOMNode().contentWindow;
     var appLocalPath = window.location.pathname.split('/').slice(0,-1).join('/');
-
-    var url = iframe.location.pathname;
-    var filename = url.replace(/\//g, '');
+    var filename = iframe.location.pathname.replace(/\//g, '');
 
     var posts = _.map(this.props.posts, function(post) {
       return post.split('-').slice(3).join('-').split('.').shift()
     });
+
     if (_.contains(posts, filename)) {
       this.props.setEditMode(true);
       this.injectStyles(iframe, appLocalPath);
-
-
-      // pen.js file
-      var script = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('script');
-      script.type = 'text/javascript';
-
-      script.onload = function(){
-        console.log('pen loaded inside iframe');
-
-        // instantiate pen
-        var scriptInline = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('script');
-        scriptInline.type = 'text/javascript';
-        scriptInline.text = 'var editor = new Pen(document.getElementsByClassName("post-content")[0]);';
-        this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(scriptInline);
-      }.bind(this);
-
-      script.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
-      this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(script);
+      this.injectScripts(iframe, appLocalPath);
     }
 
     this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
