@@ -76,7 +76,7 @@ var Home = React.createClass({
       var initPen = iframe.document.createElement('script');
         var options = '{' +
         'editor: document.querySelector(".post-content"),' +
-        'list: ["blockquote", "bold", "italic", "createlink", "outdent"]' +
+        'list: ["bold", "italic", "blockquote", "createlink", "outdent"]' +
       '}';
       initPen.text = 'var editor = new Pen(' + options + ');';
       iframe.document.querySelector('head').appendChild(initPen);
@@ -235,6 +235,7 @@ var Topbar = React.createClass({
   },
   render: function() {
     if (this.props.editMode) {
+      var frontMatter = <li onClick={this.handleFrontMatter}><span rel="tipsy" className="icon-yaml" title="Edit Front-matter"></span></li>;
       var publishLink = <li onClick={this.handlePublish}><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
       var savingText = <li>{this.props.savingText}</li>;
     }
@@ -246,6 +247,7 @@ var Topbar = React.createClass({
             <span onClick={this.handleBlogName} rel="tipsy" className="title" title={this.props.blogPath}>{blogName}</span>
             <ul className="left">
               <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
+              {frontMatter}
               {publishLink}
               {savingText}
             </ul>
