@@ -16,8 +16,8 @@ var App = React.createClass({
       url: 'http://localhost:4000'
     }
   },
-  setPath: function(path) {
-    this.setState({ path: path });
+  setBlogPath: function(path) {
+    this.setState({ blogPath: path });
   },
   setPosts: function(posts) {
     this.setState({ posts: posts });
@@ -38,7 +38,7 @@ var App = React.createClass({
         blogPath={this.state.blogPath}
         setBlogDidLoad={this.setBlogDidLoad}
         setEditMode={this.setEditMode}
-        setPath={this.setPath}
+        setBlogPath={this.setBlogPath}
         setPosts={this.setPosts}
       />
     );
@@ -52,7 +52,7 @@ var Home = React.createClass({
     }
   },
   componentDidMount: function() {
-    this.refs.fileDialog.getDOMNode().addEventListener('change', this.setPath);
+    this.refs.fileDialog.getDOMNode().addEventListener('change', this.setBlogPath);
     this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
     this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
     this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
@@ -61,7 +61,7 @@ var Home = React.createClass({
     if (this.props.blogDidLoad) {
       this.refs.myIframe.getDOMNode().addEventListener('load', this.iframeDidLoad, true);
     } else {
-      this.refs.fileDialog.getDOMNode().addEventListener('change', this.setPath);
+      this.refs.fileDialog.getDOMNode().addEventListener('change', this.setBlogPath);
       this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
       this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
       this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
@@ -120,8 +120,8 @@ var Home = React.createClass({
 
     this.props.setPosts(posts);
   },
-  setPath: function(e) {
-    this.props.setPath(e.target.value);
+  setBlogPath: function(e) {
+    this.props.setBlogPath(e.target.value);
 
     var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
 
