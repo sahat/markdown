@@ -72,7 +72,7 @@ var Home = React.createClass({
   injectScripts: function(iframe, appLocalPath) {
     var jsPen = iframe.document.createElement('script');
     var jsPenMarkdown = iframe.document.createElement('script');
-    jsPen.onload = function() {
+    jsPenMarkdown.onload = function() {
       var initPen = iframe.document.createElement('script');
         var options = '{' +
         'editor: document.querySelector(".post-content"),' +
