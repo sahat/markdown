@@ -150,10 +150,10 @@ var Home = React.createClass({
     this.handlesetPosts(e.target.value);
   },
   handleSave: function() {
+    var iframe = this.refs.myIframe.getDOMNode().contentWindow;
     var postsDir = path.join(this.props.blogPath, '_posts');
-    var location = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
-    var postSlug = location.replace(/\//g, '');
-    var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
+    var postSlug = iframe.location.pathname.replace(/\//g, '');
+    var container = iframe.document.querySelector('.post-content');
     var markdown = md(container.innerHTML, { inline:true });
     markdown = markdown.replace('’', '\'');
     _.each(this.props.posts, function(postFile) {
