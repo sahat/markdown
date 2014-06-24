@@ -101,13 +101,13 @@ var Home = React.createClass({
       this.injectScripts(iframe, appLocalPath);
     }
 
-    this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
+    iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
-  handleBlogDidLoad: function(value) {
+  blogDidLoad: function(value) {
     console.log('changing blog load value to ' + value);
     this.props.setBlogDidLoad(value);
   },
-  handleClick: function() {
+  handleOpenBlog: function() {
     this.refs.fileDialog.getDOMNode().click();
   },
   handlesetPosts: function(path) {
@@ -131,7 +131,7 @@ var Home = React.createClass({
       var portInUse = 'Address already in use';
       if (line.match(serverRunning) && line.match(serverRunning).length ||
         line.match(portInUse) && line.match(portInUse).length) {
-        this.handleBlogDidLoad(true);
+        this.blogDidLoad(true);
       }
     }.bind(this));
 
@@ -192,7 +192,7 @@ var Home = React.createClass({
             <source src="assets/video/videohive_glossy-silver.webmhd.webm" type="video/webm" />
           </video>
           <h1>Jekyll Blog Editor</h1>
-          <button ref="openBlog" onClick={this.handleClick} className="btn outline">Open Blog</button>
+          <button ref="openBlog" onClick={this.handleOpenBlog} className="btn outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
           <h4>Select a local Jekyll blog</h4>
         </div>
