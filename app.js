@@ -67,18 +67,32 @@ var Home = React.createClass({
       this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
     }
   },
+  injectScripts: function() {
+
+  },
+  injectStyles: function(iframe, appLocalPath) {
+    var editArea = iframe.document.querySelector('.post-content');
+    editArea.style.outline = 'none';
+
+    var cssPen = iframe.document.createElement('link');
+    cssPen.href = 'file://' + appLocalPath + '/assets/css/lib/pen.css';
+    cssPen.rel = 'stylesheet';
+    iframe.document.querySelector('head').appendChild(cssPen);
+  },
   iframeDidLoad: function() {
+    var iframe = this.refs.myIframe.getDOMNode().contentWindow;
     var appLocalPath = window.location.pathname.split('/').slice(0,-1).join('/');
 
-    var path = this.refs.myIframe.getDOMNode().contentWindow.location.pathname;
-    var url = path.replace(/\//g, '');
-    var posts = _.map(this.props.posts, function(post) { return post.split('-').slice(3).join('-').split('.').shift() });
+    var url = iframe.location.pathname;
+    var filename = url.replace(/\//g, '');
 
-    if (_.contains(posts, url)) {
+    var posts = _.map(this.props.posts, function(post) {
+      return post.split('-').slice(3).join('-').split('.').shift()
+    });
+    if (_.contains(posts, filename)) {
       this.props.setEditMode(true);
+      this.injectStyles(iframe, appLocalPath);
 
-      var container = this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByClassName('post-content')[0];
-      container.style.outline = 'none';
 
       // pen.js file
       var script = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('script');
@@ -96,13 +110,6 @@ var Home = React.createClass({
 
       script.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
       this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(script);
-
-      // pen styles
-      var cssLink = this.refs.myIframe.getDOMNode().contentWindow.document.createElement('link');
-      cssLink.href = 'file://' + appLocalPath + '/assets/css/lib/pen.css';
-      cssLink.rel = 'stylesheet';
-      cssLink.type = 'text/css';
-      this.refs.myIframe.getDOMNode().contentWindow.document.getElementsByTagName('head')[0].appendChild(cssLink);
     }
 
     this.refs.myIframe.getDOMNode().contentWindow.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
