@@ -174,7 +174,7 @@
           that._menu.style.marginTop = '-2px';
           setTimeout(function() {
             that._menu.style.display = 'none';
-          }, 250)
+          }, 300)
         }
       }, 200);
     };
