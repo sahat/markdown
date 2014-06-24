@@ -71,6 +71,7 @@ var Home = React.createClass({
   },
   injectScripts: function(iframe, appLocalPath) {
     var jsPen = iframe.document.createElement('script');
+    var jsPenMarkdown = iframe.document.createElement('script');
     jsPen.onload = function() {
       var initPen = iframe.document.createElement('script');
         var options = '{' +
@@ -81,7 +82,9 @@ var Home = React.createClass({
       iframe.document.querySelector('head').appendChild(initPen);
     };
     jsPen.src = 'file://' + appLocalPath + '/assets/js/lib/pen.js';
+    jsPenMarkdown.src = 'file://' + appLocalPath + '/assets/js/lib/markdown.js';
     iframe.document.querySelector('head').appendChild(jsPen);
+    iframe.document.querySelector('head').appendChild(jsPenMarkdown);
   },
   injectStyles: function(iframe, appLocalPath) {
     var editArea = iframe.document.querySelector('.post-content');
@@ -190,7 +193,7 @@ var Home = React.createClass({
             blogBaseUrl={this.state.blogBaseUrl}
             handleHome={this.handleHome}
           />
-          <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
+          <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
       );
     } else {
