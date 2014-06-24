@@ -99,6 +99,8 @@ var Home = React.createClass({
       this.props.setEditMode(true);
       this.injectStyles(iframe, appLocalPath);
       this.injectScripts(iframe, appLocalPath);
+    } else {
+      this.props.setEditMode(false);
     }
 //    this.setState({ blogBaseUrl: iframe.location.origin });
     iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
