@@ -107,7 +107,7 @@ var Home = React.createClass({
       this.props.setEditMode(false);
     }
 //    this.setState({ blogBaseUrl: iframe.location.origin });
-    iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
+    iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 550), true);
   },
   blogDidLoad: function(value) {
     console.log('changing blog load value to ' + value);
@@ -177,7 +177,7 @@ var Home = React.createClass({
     var self = this;
     this.setState({ savingText: 'Saving...' });
     this.handleSave();
-    _.delay(function() { self.setState({ savingText: '' }); }, 1000);
+    _.delay(function() { self.setState({ savingText: '' }); }, 900);
   },
   render: function() {
     if (this.props.blogDidLoad) {
