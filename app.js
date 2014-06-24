@@ -48,7 +48,9 @@ var App = React.createClass({
 var Home = React.createClass({
   getInitialState: function() {
     return {
-      savingText: ''
+      savingText: '',
+      blogBaseUrl: ''
+
     }
   },
   componentDidMount: function() {
@@ -90,17 +92,15 @@ var Home = React.createClass({
     var iframe = this.refs.myIframe.getDOMNode().contentWindow;
     var appLocalPath = window.location.pathname.split('/').slice(0,-1).join('/');
     var filename = iframe.location.pathname.replace(/\//g, '');
-
     var posts = _.map(this.props.posts, function(post) {
       return post.split('-').slice(3).join('-').split('.').shift()
     });
-
     if (_.contains(posts, filename)) {
       this.props.setEditMode(true);
       this.injectStyles(iframe, appLocalPath);
       this.injectScripts(iframe, appLocalPath);
     }
-
+//    this.setState({ blogBaseUrl: iframe.location.origin });
     iframe.document.addEventListener('keyup', _.debounce(this.handleKeyUp, 1000), true);
   },
   blogDidLoad: function(value) {
@@ -160,6 +160,10 @@ var Home = React.createClass({
       }
     });
   },
+  handleHome: function() {
+    var iframe = this.refs.myIframe.getDOMNode().contentWindow;
+    iframe.location = iframe.location.origin;
+  },
   handleKeyUp: function(e) {
     if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
       return false;
@@ -181,6 +185,8 @@ var Home = React.createClass({
             blogPath={this.props.blogPath}
             setBlogDidLoad={this.props.setBlogDidLoad}
             setEditMode={this.props.setEditMode}
+            blogBaseUrl={this.state.blogBaseUrl}
+            handleHome={this.handleHome}
           />
           <iframe ref="myIframe" onKeyUp={this.handleKeyUp} src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
@@ -209,7 +215,7 @@ var Topbar = React.createClass({
   componentDidUpdate: function() {
     $('span[rel=tipsy]').tipsy({ fade: true });
   },
-  handleHome: function() {
+  handleExit: function() {
     this.props.setBlogDidLoad(false);
     this.props.setEditMode(false);
   },
@@ -232,7 +238,7 @@ var Topbar = React.createClass({
       <div className="fixed">
         <nav className="top-bar">
           <section className="top-bar-section">
-            <span rel="tipsy" className="title" title={this.props.blogPath}><strong>{blogName}</strong></span>
+            <span onClick={this.handleBlogName} rel="tipsy" className="title" title={this.props.blogPath}>{blogName}</span>
             <ul className="left">
               <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
               {publishLink}
@@ -240,7 +246,8 @@ var Topbar = React.createClass({
             </ul>
             <ul className="right">
               <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
-              <li onClick={this.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
+              <li onClick={this.props.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
+              <li onClick={this.handleExit}><span rel="tipsy" className="icon-exit" title="Exit"></span></li>
             </ul>
           </section>
         </nav>
