@@ -7,11 +7,10 @@
  * FONT-FACE...........Import brand font files
  */
 
-$topbar-height: 40px;
+$topbar-height: 35px;
 $topbar-bg: #2e2e2e;
 
 @import "lib/foundation";
-@import "utilities";
 
 body {
   padding-top: $topbar-height;
@@ -154,8 +153,8 @@ video {
 }
 
 .icon-new:before { content: '\E003'; }
+.icon-exit:before { content: '\E740'; }
 .icon-home:before { content: '\2302'; }
-.icon-save:before { content: '\1F4BE'; }
 .icon-save:before { content: '\1F4BE'; }
 .icon-publish:before { content: '\1F4E4'; }
 .icon-settings:before { content: '\2692'; }
