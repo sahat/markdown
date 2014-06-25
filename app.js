@@ -304,9 +304,6 @@ var Topbar = React.createClass({
 
 
 var ModalDialog = React.createClass({
-  componentDidMount: function() {
-
-  },
   hide: function() {
     $(this.getDOMNode()).foundation('reveal', 'close');
   },
@@ -324,6 +321,9 @@ var ModalDialog = React.createClass({
     this.hide();
     return false;
   },
+  handleChange: function(e) {
+    console.log(e.target);
+  },
   render: function() {
     if (this.props.frontMatter) {
       var frontMatter = yaml.load(this.props.frontMatter);
@@ -331,16 +331,16 @@ var ModalDialog = React.createClass({
         <div className="reveal-modal" data-reveal>
           <form onSubmit={this.handleSubmit}>
             <label>Layout
-              <input ref="layout" type="text" value={frontMatter.layout} />
+              <input ref="layout" type="text" defaultValue={frontMatter.layout} />
             </label>
             <label>Title
-              <input ref="title" type="text" value={frontMatter.title} />
+              <input ref="title" type="text" defaultValue={frontMatter.title} />
             </label>
             <label>Excerpt
-              <input ref="excerpt" type="text" value={frontMatter.excerpt} />
+              <input ref="excerpt" type="text" defaultValue={frontMatter.excerpt} />
             </label>
             <label>Image
-              <input ref="image" type="text" value={frontMatter.image} />
+              <input ref="image" type="text" defaultValue={frontMatter.image} />
             </label>
             <button type="submit" className="small">Update</button>
           </form>
