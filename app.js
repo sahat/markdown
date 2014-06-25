@@ -285,9 +285,21 @@ var ModalDialog = React.createClass({
   render: function() {
     return (
       <div className="reveal-modal" data-reveal>
-        <h2>Awesome. I have it.</h2>
-        <p className="lead">Your couch.  It is mine.</p>
-        <p>Im a cool paragraph that lives inside of an even cooler modal. Wins</p>
+        <form>
+          <label>Layout
+            <input type="text" />
+          </label>
+          <label>Title
+            <input type="text" />
+          </label>
+          <label>Excerpt
+            <input type="text" />
+          </label>
+          <label>Image
+            <input type="text" />
+          </label>
+          <button className="small">Update</button>
+        </form>
         <a className="close-reveal-modal">&#215;</a>
       </div>
     );
