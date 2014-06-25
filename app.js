@@ -226,6 +226,7 @@ var Home = React.createClass({
           />
           <ModalDialog
             ref='modal'
+            frontMatter={this.state.frontMatter}
             updateFrontMatter={this.updateFrontMatter}
           />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
@@ -324,26 +325,31 @@ var ModalDialog = React.createClass({
     return false;
   },
   render: function() {
-    return (
-      <div className="reveal-modal" data-reveal>
-        <form onSubmit={this.handleSubmit}>
-          <label>Layout
-            <input ref="layout" type="text" />
-          </label>
-          <label>Title
-            <input ref="title" type="text" />
-          </label>
-          <label>Excerpt
-            <input ref="excerpt" type="text" />
-          </label>
-          <label>Image
-            <input ref="image" type="text" />
-          </label>
-          <button type="submit" className="small">Update</button>
-        </form>
-        <a className="close-reveal-modal">&#215;</a>
-      </div>
-    );
+    if (this.props.frontMatter) {
+      var frontMatter = yaml.load(this.props.frontMatter);
+      return (
+        <div className="reveal-modal" data-reveal>
+          <form onSubmit={this.handleSubmit}>
+            <label>Layout
+              <input ref="layout" type="text" value={frontMatter.layout} />
+            </label>
+            <label>Title
+              <input ref="title" type="text" value={frontMatter.title} />
+            </label>
+            <label>Excerpt
+              <input ref="excerpt" type="text" value={frontMatter.excerpt} />
+            </label>
+            <label>Image
+              <input ref="image" type="text" value={frontMatter.image} />
+            </label>
+            <button type="submit" className="small">Update</button>
+          </form>
+          <a className="close-reveal-modal">&#215;</a>
+        </div>
+        );
+    } else {
+      return <div></div>;
+    }
   }
 });
 
