@@ -312,7 +312,7 @@ var ModalDialog = React.createClass({
   show: function() {
     $(this.getDOMNode()).foundation('reveal', 'open');
   },
-  saveFrontMatter: function() {
+  handleSubmit: function() {
     var data = {
       layout: this.refs.layout.getDOMNode().value,
       title: this.refs.title.getDOMNode().value,
@@ -320,11 +320,13 @@ var ModalDialog = React.createClass({
       image: this.refs.image.getDOMNode().value
     };
     this.props.updateFrontMatter(data);
+    this.hide();
+    return false;
   },
   render: function() {
     return (
       <div className="reveal-modal" data-reveal>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <label>Layout
             <input ref="layout" type="text" />
           </label>
@@ -337,7 +339,7 @@ var ModalDialog = React.createClass({
           <label>Image
             <input ref="image" type="text" />
           </label>
-          <button onClick={this.saveFrontMatter} className="small">Update</button>
+          <button type="submit" className="small">Update</button>
         </form>
         <a className="close-reveal-modal">&#215;</a>
       </div>
