@@ -178,6 +178,9 @@ var Home = React.createClass({
     this.handleSave();
     _.delay(function() { self.setState({ savingText: '' }); }, 900);
   },
+  displayModal: function() {
+    this.refs.modal.show();
+  },
   render: function() {
     if (this.props.blogDidLoad) {
       return (
@@ -192,7 +195,9 @@ var Home = React.createClass({
             setEditMode={this.props.setEditMode}
             blogBaseUrl={this.state.blogBaseUrl}
             handleHome={this.handleHome}
+            displayModal={this.displayModal}
           />
+          <ModalDialog ref='modal' />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
       );
@@ -233,10 +238,13 @@ var Topbar = React.createClass({
   handleSettings: function() {
 
   },
+  handleFrontMatter: function() {
+    this.props.displayModal();
+  },
   render: function() {
     if (this.props.editMode) {
       var frontMatter = <li onClick={this.handleFrontMatter}><span rel="tipsy" className="icon-yaml" title="Edit Front-matter"></span></li>;
-      var publishLink = <li onClick={this.handlePublish}><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
+      var publishLink = <li><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
       var savingText = <li>{this.props.savingText}</li>;
     }
     var blogName = this.props.blogPath.split('/').slice(-1).toString();
@@ -258,6 +266,29 @@ var Topbar = React.createClass({
             </ul>
           </section>
         </nav>
+      </div>
+    );
+  }
+});
+
+
+var ModalDialog = React.createClass({
+  componentDidMount: function() {
+
+  },
+  hide: function() {
+    $(this.getDOMNode()).foundation('reveal', 'close');
+  },
+  show: function() {
+    $(this.getDOMNode()).foundation('reveal', 'open');
+  },
+  render: function() {
+    return (
+      <div className="reveal-modal" data-reveal>
+        <h2>Awesome. I have it.</h2>
+        <p className="lead">Your couch.  It is mine.</p>
+        <p>Im a cool paragraph that lives inside of an even cooler modal. Wins</p>
+        <a className="close-reveal-modal">&#215;</a>
       </div>
     );
   }
