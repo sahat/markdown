@@ -238,7 +238,7 @@ var Home = React.createClass({
             <source src="assets/video/videohive_glossy-silver.webmhd.webm" type="video/webm" />
           </video>
           <h1>Jekyll Blog Editor</h1>
-          <button ref="openBlog" onClick={this.handleOpenBlog} className="btn outline">Open Blog</button>
+          <button ref="openBlog" onClick={this.handleOpenBlog} className="outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
           <h4>Select a local Jekyll blog</h4>
         </div>
