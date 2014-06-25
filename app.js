@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var http = require('http');
 var spawn = require('child_process').spawn;
+var yaml = require('js-yaml');
 
 var App = React.createClass({
   getInitialState: function() {
@@ -159,10 +160,10 @@ var Home = React.createClass({
     _.each(this.props.posts, function(postFile) {
       if (postFile.match(postSlug)) {
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
-        var yaml = file.split('---').slice(0,2);
-        yaml.push('\n\n');
-        yaml = yaml.join('---');
-        fs.writeFileSync(path.join(postsDir, postFile), yaml);
+        var frontMatter = file.split('---').slice(0,2);
+        frontMatter.push('\n\n');
+        frontMatter = frontMatter.join('---');
+        fs.writeFileSync(path.join(postsDir, postFile), frontMatter);
         fs.appendFileSync(path.join(postsDir, postFile), markdown);
         console.log('File saved');
       }
