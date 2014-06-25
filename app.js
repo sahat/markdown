@@ -50,8 +50,8 @@ var Home = React.createClass({
   getInitialState: function() {
     return {
       savingText: '',
-      blogBaseUrl: ''
-
+      blogBaseUrl: '',
+      frontMatter: null
     }
   },
   componentDidMount: function() {
@@ -157,12 +157,23 @@ var Home = React.createClass({
     var container = iframe.document.querySelector('.post-content');
     var markdown = md(container.innerHTML, { inline:true });
     markdown = markdown.replace('’', '\'');
+    var self = this;
     _.each(this.props.posts, function(postFile) {
       if (postFile.match(postSlug)) {
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
         var frontMatter = file.split('---').slice(0,2);
+        if (self.state.frontMatter) {
+          console.log(self.stateFrontMatter)
+          frontMatter[1] = self.state.frontMatter
+        } else {
+          self.setState({ frontMatter: frontMatter[1] });
+        }
+
+        window.frontMatter = frontMatter;
+//        frontMatter[1] = frontMatter[1].trim();
         frontMatter.push('\n\n');
         frontMatter = frontMatter.join('---');
+        console.log(frontMatter);
         fs.writeFileSync(path.join(postsDir, postFile), frontMatter);
         fs.appendFileSync(path.join(postsDir, postFile), markdown);
         console.log('File saved');
@@ -182,6 +193,21 @@ var Home = React.createClass({
   displayModal: function() {
     this.refs.modal.show();
   },
+  updateFrontMatter: function(data) {
+    console.log(data);
+    var frontMatter = this.state.frontMatter;
+    var yamlObject = yaml.load(frontMatter);
+    console.log(yamlObject);
+    yamlObject.layout = data.layout;
+    yamlObject.title = data.title;
+    yamlObject.excerpt = data.excerpt;
+    yamlObject.image = data.image;
+
+    frontMatter = yaml.dump(yamlObject);
+    frontMatter = '\n' + frontMatter;
+    this.setState({ frontMatter: frontMatter });
+    this.handleSave();
+  },
   render: function() {
     if (this.props.blogDidLoad) {
       return (
@@ -198,7 +224,10 @@ var Home = React.createClass({
             handleHome={this.handleHome}
             displayModal={this.displayModal}
           />
-          <ModalDialog ref='modal' />
+          <ModalDialog
+            ref='modal'
+            updateFrontMatter={this.updateFrontMatter}
+          />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
       );
@@ -283,23 +312,32 @@ var ModalDialog = React.createClass({
   show: function() {
     $(this.getDOMNode()).foundation('reveal', 'open');
   },
+  saveFrontMatter: function() {
+    var data = {
+      layout: this.refs.layout.getDOMNode().value,
+      title: this.refs.title.getDOMNode().value,
+      excerpt: this.refs.excerpt.getDOMNode().value,
+      image: this.refs.image.getDOMNode().value
+    };
+    this.props.updateFrontMatter(data);
+  },
   render: function() {
     return (
       <div className="reveal-modal" data-reveal>
         <form>
           <label>Layout
-            <input type="text" />
+            <input ref="layout" type="text" />
           </label>
           <label>Title
-            <input type="text" />
+            <input ref="title" type="text" />
           </label>
           <label>Excerpt
-            <input type="text" />
+            <input ref="excerpt" type="text" />
           </label>
           <label>Image
-            <input type="text" />
+            <input ref="image" type="text" />
           </label>
-          <button className="small">Update</button>
+          <button onClick={this.saveFrontMatter} className="small">Update</button>
         </form>
         <a className="close-reveal-modal">&#215;</a>
       </div>
