@@ -248,7 +248,6 @@ var Home = React.createClass({
   }
 });
 
-
 var Topbar = React.createClass({
   componentDidMount: function() {
     $('span[rel=tipsy]').tipsy({ fade: true });
@@ -302,7 +301,6 @@ var Topbar = React.createClass({
   }
 });
 
-
 var ModalDialog = React.createClass({
   hide: function() {
     $(this.getDOMNode()).foundation('reveal', 'close');
@@ -320,9 +318,6 @@ var ModalDialog = React.createClass({
     this.props.updateFrontMatter(data);
     this.hide();
     return false;
-  },
-  handleChange: function(e) {
-    console.log(e.target);
   },
   render: function() {
     if (this.props.frontMatter) {
