@@ -194,19 +194,15 @@ var Home = React.createClass({
     this.refs.modal.show();
   },
   updateFrontMatter: function(data) {
-    console.log(data);
     var frontMatter = this.state.frontMatter;
     var yamlObject = yaml.load(frontMatter);
-    console.log(yamlObject);
     yamlObject.layout = data.layout;
     yamlObject.title = data.title;
     yamlObject.excerpt = data.excerpt;
     yamlObject.image = data.image;
-
     frontMatter = yaml.dump(yamlObject);
     frontMatter = '\n' + frontMatter;
     this.setState({ frontMatter: frontMatter });
-    this.handleSave();
   },
   render: function() {
     if (this.props.blogDidLoad) {
