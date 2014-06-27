@@ -259,6 +259,7 @@ var Topbar = React.createClass({
 
   },
   handleNewPost: function() {
+    var today = new Date().toJSON().slice(0,10);
 
   },
   handleSettings: function() {
