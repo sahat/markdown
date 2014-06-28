@@ -193,6 +193,9 @@ var Home = React.createClass({
   displayModal: function() {
     this.refs.modal.show();
   },
+  displayNewPostDialog: function() {
+    this.refs.newPostDialog.show();
+  },
   updateFrontMatter: function(data) {
     var frontMatter = this.state.frontMatter;
     var yamlObject = yaml.load(frontMatter);
@@ -219,10 +222,15 @@ var Home = React.createClass({
             blogBaseUrl={this.state.blogBaseUrl}
             handleHome={this.handleHome}
             displayModal={this.displayModal}
+            displayNewPostDialog={this.displayNewPostDialog}
           />
           <ModalDialog
             ref='modal'
             frontMatter={this.state.frontMatter}
+            updateFrontMatter={this.updateFrontMatter}
+          />
+          <NewPostDialog
+            ref='newPostDialog'
             updateFrontMatter={this.updateFrontMatter}
           />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
@@ -260,6 +268,9 @@ var Topbar = React.createClass({
   },
   handleNewPost: function() {
     var today = new Date().toJSON().slice(0,10);
+    this.props.displayNewPostDialog();
+//    fs.writeFileSync(path.join(postsDir, today + '-new-post.md'), frontMatter);
+
 
   },
   handleSettings: function() {
@@ -299,6 +310,53 @@ var Topbar = React.createClass({
 });
 
 var ModalDialog = React.createClass({
+  hide: function() {
+    $(this.getDOMNode()).foundation('reveal', 'close');
+  },
+  show: function() {
+    $(this.getDOMNode()).foundation('reveal', 'open');
+  },
+  handleSubmit: function() {
+    var data = {
+      layout: this.refs.layout.getDOMNode().value,
+      title: this.refs.title.getDOMNode().value,
+      excerpt: this.refs.excerpt.getDOMNode().value,
+      image: this.refs.image.getDOMNode().value
+    };
+    this.props.updateFrontMatter(data);
+    this.hide();
+    return false;
+  },
+  render: function() {
+    if (this.props.frontMatter) {
+      var frontMatter = yaml.load(this.props.frontMatter);
+      return (
+        <div className="reveal-modal" data-reveal>
+          <form onSubmit={this.handleSubmit}>
+            <label>Layout
+              <input ref="layout" type="text" defaultValue={frontMatter.layout} />
+            </label>
+            <label>Title
+              <input ref="title" type="text" defaultValue={frontMatter.title} />
+            </label>
+            <label>Excerpt
+              <input ref="excerpt" type="text" defaultValue={frontMatter.excerpt} />
+            </label>
+            <label>Image
+              <input ref="image" type="text" defaultValue={frontMatter.image} />
+            </label>
+            <button type="submit" className="small">Update</button>
+          </form>
+          <a className="close-reveal-modal">&#215;</a>
+        </div>
+        );
+    } else {
+      return <div></div>;
+    }
+  }
+});
+
+var NewPostDialog = React.createClass({
   hide: function() {
     $(this.getDOMNode()).foundation('reveal', 'close');
   },
