@@ -1,4 +1,3 @@
-/*! Licensed under MIT, https://github.com/sofish/pen */
 (function() {
 
   // only works with Pen

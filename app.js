@@ -24,6 +24,7 @@ var App = React.createClass({
     this.setState({ posts: posts });
   },
   setBlogDidLoad: function(value) {
+    console.log('upading blog did load')
     this.setState({ blogDidLoad: value })
   },
   setEditMode: function(value) {
@@ -121,7 +122,6 @@ var Home = React.createClass({
   },
   handlesetPosts: function(path) {
     var files = fs.readdirSync(path + '/_posts');
-
     var posts = _.filter(files, function(file) {
       var extension = file.split('.').pop();
       return extension === 'md' || extension === 'markdown'
@@ -130,12 +130,18 @@ var Home = React.createClass({
     this.props.setPosts(posts);
   },
   setBlogPath: function(e) {
-    this.props.setBlogPath(e.target.value);
+    var loc = e.target.value.split(path.sep).join('/');
 
-    var jekyll = spawn('jekyll', ['serve', '--watch', '-s', e.target.value]);
+    this.props.setBlogPath(loc);
+
+    // TODO: if !(windows) use jekyll instead
+    console.log(loc);
+    console.log(e.target.value);
+    var jekyll = exec('jekyll.bat', ['serve', '--watch', '-s', loc]);
 
     jekyll.stdout.on('data', function (data) {
       var line = data.toString();
+      console.log(line);
       var serverRunning = 'Server running...';
       var portInUse = 'Address already in use';
       if (line.match(serverRunning) && line.match(serverRunning).length ||
@@ -148,7 +154,7 @@ var Home = React.createClass({
       jekyll.kill();
     });
 
-    this.handlesetPosts(e.target.value);
+    this.handlesetPosts(loc);
   },
   handleSave: function() {
     var iframe = this.refs.myIframe.getDOMNode().contentWindow;
@@ -404,15 +410,3 @@ var NewPostDialog = React.createClass({
 });
 
 React.renderComponent(<App />, document.body);
-
-// ========================
-// Node Webkit Live Reload
-// ========================
-
-var loc = './';
-
-fs.watch(loc, function() {
-  if (location) {
-    location.reload();
-  }
-});

@@ -10,8 +10,8 @@
 
   // copy props from a obj
   utils.copy = function(defaults, source) {
-    for(var p in source) {
-      if(source.hasOwnProperty(p)) {
+    for (var p in source) {
+      if (source.hasOwnProperty(p)) {
         var val = source[p];
         defaults[p] = this.is(val, 'Object') ? this.copy({}, val) :
           this.is(val, 'Array') ? this.copy([], val) : val;
@@ -22,18 +22,20 @@
 
   // log
   utils.log = function(message, force) {
-    if(window._pen_debug_mode_on || force) console.log('%cPEN DEBUGGER: %c' + message, 'font-family:arial,sans-serif;color:#1abf89;line-height:2em;', 'font-family:cursor,monospace;color:#333;');
+    if (window._pen_debug_mode_on || force) console.log('%cPEN DEBUGGER: %c' + message, 'font-family:arial,sans-serif;color:#1abf89;line-height:2em;', 'font-family:cursor,monospace;color:#333;');
   };
 
   // shift a function
   utils.shift = function(key, fn, time) {
     time = time || 50;
     var queue = this['_shift_fn' + key], timeout = 'shift_timeout' + key, current;
-    if ( queue ) {
+    if (queue) {
       queue.concat([fn, time]);
     }
     else {
-      queue = [[fn, time]];
+      queue = [
+        [fn, time]
+      ];
     }
     current = queue.pop();
     clearTimeout(this[timeout]);
@@ -58,9 +60,9 @@
     };
 
     // user-friendly config
-    if(config.nodeType === 1) {
+    if (config.nodeType === 1) {
       defaults.editor = config;
-    } else if(config.match && config.match(/^#[\S]+$/)) {
+    } else if (config.match && config.match(/^#[\S]+$/)) {
       defaults.editor = doc.getElementById(config.slice(1));
     } else {
       defaults = utils.copy(defaults, config);
@@ -71,13 +73,13 @@
 
   Pen = function(config) {
 
-    if(!config) return utils.log('can\'t find config', true);
+    if (!config) return utils.log('can\'t find config', true);
 
     // merge user config
     var defaults = utils.merge(config);
 
-    if(defaults.editor.nodeType !== 1) return utils.log('can\'t find editor');
-    if(defaults.debug) window._pen_debug_mode_on = true;
+    if (defaults.editor.nodeType !== 1) return utils.log('can\'t find editor');
+    if (defaults.debug) window._pen_debug_mode_on = true;
 
     var editor = defaults.editor;
 
@@ -86,7 +88,7 @@
 
     // set contenteditable
     var editable = editor.getAttribute('contenteditable');
-    if(!editable) editor.setAttribute('contenteditable', 'true');
+    if (!editable) editor.setAttribute('contenteditable', 'true');
 
     // assign config
     this.config = defaults;
@@ -114,8 +116,8 @@
   // node effects
   Pen.prototype._effectNode = function(el, returnAsNodeName) {
     var nodes = [];
-    while(el !== this.config.editor) {
-      if(el.nodeName.match(/(?:[pubia]|h[1-6]|blockquote|[uo]l|li)/i)) {
+    while (el !== this.config.editor) {
+      if (el.nodeName.match(/(?:[pubia]|h[1-6]|blockquote|[uo]l|li)/i)) {
         nodes.push(returnAsNodeName ? el.nodeName.toLowerCase() : el);
       }
       el = el.parentNode;
@@ -136,10 +138,10 @@
 
     var that = this, icons = '';
 
-    for(var i = 0, list = this.config.list; i < list.length; i++) {
+    for (var i = 0, list = this.config.list; i < list.length; i++) {
       var name = list[i], klass = 'pen-icon icon-' + name;
       icons += '<i class="' + klass + '" data-action="' + name + '">' + (name.match(/^h[1-6]|p$/i) ? name.toUpperCase() : '') + '</i>';
-      if((name === 'createlink')) icons += '<input class="pen-input" placeholder="http://" />';
+      if ((name === 'createlink')) icons += '<input class="pen-input" placeholder="http://" />';
     }
 
     var menu = doc.createElement('div');
@@ -150,7 +152,7 @@
     doc.body.appendChild((this._menu = menu));
 
     var setpos = function() {
-      if(menu.style.display === 'block') that.menu();
+      if (menu.style.display === 'block') that.menu();
     };
 
     // change menu offset when window resize / scroll
@@ -160,11 +162,11 @@
     var editor = this.config.editor;
     var toggle = function() {
 
-      if(that._isDestroyed) return;
+      if (that._isDestroyed) return;
 
       utils.shift('toggle_menu', function() {
         var range = that._sel;
-        if(!range.isCollapsed) {
+        if (!range.isCollapsed) {
           //show menu
           that._range = range.getRangeAt(0);
           that.menu().highlight();
@@ -174,7 +176,7 @@
           that._menu.style.marginTop = '-2px';
           setTimeout(function() {
             that._menu.style.display = 'none';
-          }, 300)
+          }, 250)
         }
       }, 200);
     };
@@ -189,7 +191,7 @@
     menu.addEventListener('click', function(e) {
       var action = e.target.getAttribute('data-action');
 
-      if(!action) return;
+      if (!action) return;
 
       var apply = function(value) {
         that._sel.removeAllRanges();
@@ -200,7 +202,7 @@
       };
 
       // create link
-      if(action === 'createlink') {
+      if (action === 'createlink') {
         var input = menu.getElementsByTagName('input')[0], createlink;
 
         input.style.display = 'block';
@@ -208,13 +210,13 @@
 
         createlink = function(input) {
           input.style.display = 'none';
-          if(input.value) return apply(input.value.replace(/(^\s+)|(\s+$)/g, '').replace(/^(?!http:\/\/|https:\/\/)(.*)$/, 'http://$1'));
+          if (input.value) return apply(input.value.replace(/(^\s+)|(\s+$)/g, '').replace(/^(?!http:\/\/|https:\/\/)(.*)$/, 'http://$1'));
           action = 'unlink';
           apply();
         };
 
         input.onkeypress = function(e) {
-          if(e.which === 13) return createlink(e.target);
+          if (e.which === 13) return createlink(e.target);
         };
 
         return input.onkeypress;
@@ -250,7 +252,7 @@
 
     effects.forEach(function(item) {
       var tag = item.nodeName.toLowerCase();
-      switch(tag) {
+      switch (tag) {
         case 'a':
           return (menu.querySelector('input').value = item.href), highlight('createlink');
         case 'i':
@@ -288,7 +290,7 @@
 
     overall = function(cmd, val) {
       var message = ' to exec 「' + cmd + '」 command' + (val ? (' with value: ' + val) : '');
-      if(document.execCommand(cmd, false, val) && that.config.debug) {
+      if (document.execCommand(cmd, false, val) && that.config.debug) {
         utils.log('success' + message);
       } else {
         utils.log('fail' + message);
@@ -299,7 +301,7 @@
       var range = that._sel.getRangeAt(0)
         , node = range.startContainer;
 
-      while(node.nodeType !== 1) {
+      while (node.nodeType !== 1) {
         node = node.parentNode;
       }
 
@@ -309,22 +311,26 @@
     };
 
     block = function(name) {
-      if(that._effectNode(that._sel.getRangeAt(0).startContainer, true).indexOf(name) !== -1) {
-        if(name === 'blockquote') return document.execCommand('outdent', false, null);
+      console.log('block')
+      if (that._effectNode(that._sel.getRangeAt(0).startContainer, true).indexOf(name) !== -1) {
+        if (name === 'blockquote') {
+          console.log('blockquote!!!')
+          return document.execCommand('outdent', false, null);
+        }
         name = 'p';
       }
       return overall('formatblock', name);
     };
 
     this._actions = function(name, value) {
-      if(name.match(reg.block)) {
+      if (name.match(reg.block)) {
         block(name);
-      } else if(name.match(reg.inline) || name.match(reg.source)) {
+      } else if (name.match(reg.inline) || name.match(reg.source)) {
         overall(name, value);
-      } else if(name.match(reg.insert)) {
+      } else if (name.match(reg.insert)) {
         insert(name);
       } else {
-        if(this.config.debug) utils.log('can not find command function for name: ' + name + (value ? (', value: ' + value) : ''));
+        if (this.config.debug) utils.log('can not find command function for name: ' + name + (value ? (', value: ' + value) : ''));
       }
     };
 
@@ -342,7 +348,7 @@
     // display block to caculate it's width & height
     menu.style.display = 'block';
     menu.style.top = top - menu.clientHeight + 'px';
-    menu.style.left = left - (menu.clientWidth/2) + 'px';
+    menu.style.left = left - (menu.clientWidth / 2) + 'px';
     menu.style.opacity = 0.9;
     menu.style.marginTop = '2px';
     return this;
@@ -352,7 +358,7 @@
     var that = this;
     if (!window.onbeforeunload) {
       window.onbeforeunload = function() {
-        if(!that._isDestroyed) return 'Are you going to leave here?';
+        if (!that._isDestroyed) return 'Are you going to leave here?';
       };
     }
   };
@@ -361,7 +367,7 @@
     var destroy = isAJoke ? false : true
       , attr = isAJoke ? 'setAttribute' : 'removeAttribute';
 
-    if(!isAJoke) {
+    if (!isAJoke) {
       this._sel.removeAllRanges();
       this._menu.style.display = 'none';
     }
@@ -377,7 +383,7 @@
 
   // a fallback for old browers
   FakePen = function(config) {
-    if(!config) return utils.log('can\'t find config', true);
+    if (!config) return utils.log('can\'t find config', true);
 
     var defaults = utils.merge(config)
       , klass = defaults.editor.getAttribute('class');
