@@ -92,11 +92,15 @@ video {
 .top-bar-section ul li {
   cursor: pointer;
   position: relative;
-  padding: 10px 15px;
   line-height: $topbar-height;
+  font-size: 0.8125rem;
   color: #b4bac1;
   background: transparent;
   transition: color .2s ease-in;
+
+  i {
+    padding: 10px 15px;
+  }
 
   &:hover {
     color: #fff;

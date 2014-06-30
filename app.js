@@ -236,10 +236,6 @@ var Home = React.createClass({
             frontMatter={this.state.frontMatter}
             updateFrontMatter={this.updateFrontMatter}
           />
-          <NewPostDialog
-            ref='newPostDialog'
-            updateFrontMatter={this.updateFrontMatter}
-          />
           <iframe ref="myIframe" src={this.props.url} width="100%" height="100%" frameBorder="0"></iframe>
         </div>
       );
@@ -261,10 +257,10 @@ var Home = React.createClass({
 
 var Topbar = React.createClass({
   componentDidMount: function() {
-    $('span[rel=tipsy]').tipsy({ fade: true });
+    $('li[rel=tipsy]').tipsy({ fade: true });
   },
   componentDidUpdate: function() {
-    $('span[rel=tipsy]').tipsy({ fade: true });
+    $('li[rel=tipsy]').tipsy({ fade: true });
   },
   handleExit: function() {
     this.props.setBlogDidLoad(false);
@@ -288,8 +284,8 @@ var Topbar = React.createClass({
   },
   render: function() {
     if (this.props.editMode) {
-      var frontMatter = <li onClick={this.handleFrontMatter}><span rel="tipsy" className="icon-yaml" title="Edit Front-matter"></span></li>;
-      var publishLink = <li><span rel="tipsy" className="icon-publish" title="Publish to GitHub"></span></li>;
+      var frontMatter = <li rel="tipsy" title="Edit Front-matter" onClick={this.handleFrontMatter}><i className="fa fa-magic"></i></li>;
+      var publishLink = <li rel="tipsy" title="Publish to GitHub"><i className="fa fa-github"></i></li>;
       var savingText = <li>{this.props.savingText}</li>;
     }
     var blogName = this.props.blogPath.split('/').slice(-1).toString();
@@ -299,15 +295,15 @@ var Topbar = React.createClass({
           <section className="top-bar-section">
             <span onClick={this.handleBlogName} rel="tipsy" className="title" title={this.props.blogPath}>{blogName}</span>
             <ul className="left">
-              <li onClick={this.handleNewPost}><span rel="tipsy" className="icon-new" title="New"></span></li>
+              <li rel="tipsy" title="New Post" onClick={this.handleNewPost}><i  className="fa fa-file-text"></i></li>
               {frontMatter}
               {publishLink}
               {savingText}
             </ul>
             <ul className="right">
-              <li onClick={this.handleSettings}><span rel="tipsy" className="icon-settings" title="Settings"></span></li>
-              <li onClick={this.props.handleHome}><span rel="tipsy" className="icon-home" title="Home"></span></li>
-              <li onClick={this.handleExit}><span rel="tipsy" className="icon-exit" title="Exit"></span></li>
+              <li onClick={this.handleSettings}><i rel="tipsy" className="fa fa-cogs" title="Settings"></i></li>
+              <li onClick={this.props.handleHome}><i rel="tipsy" className="fa fa-home" title="Home"></i></li>
+              <li onClick={this.handleExit}><i rel="tipsy" className="fa fa-sign-out" title="Exit"></i></li>
             </ul>
           </section>
         </nav>
