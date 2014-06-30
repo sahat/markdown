@@ -137,13 +137,14 @@ var Home = React.createClass({
     // TODO: if !(windows) use jekyll instead
     console.log(loc);
     console.log(e.target.value);
-    var jekyll = exec('jekyll.bat', ['serve', '--watch', '-s', loc]);
+    var cmd = (process.platform === 'win32') ? 'jekyll.bat' : 'jekyll';
+    var child = spawn(cmd, ['serve', '--watch', '-s', loc]);
 
-    jekyll.stdout.on('data', function (data) {
+    child.stdout.on('data', function (data) {
       var line = data.toString();
       console.log(line);
       var serverRunning = 'Server running...';
-      var portInUse = 'Address already in use';
+      var portInUse = (process.platform === 'win32') ? 'Only one usage of each socket address' : 'Address already in use';
       if (line.match(serverRunning) && line.match(serverRunning).length ||
         line.match(portInUse) && line.match(portInUse).length) {
         this.blogDidLoad(true);
@@ -151,7 +152,7 @@ var Home = React.createClass({
     }.bind(this));
 
     process.on('exit', function() {
-      jekyll.kill();
+      child.kill();
     });
 
     this.handlesetPosts(loc);
