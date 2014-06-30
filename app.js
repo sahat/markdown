@@ -301,9 +301,9 @@ var Topbar = React.createClass({
               {savingText}
             </ul>
             <ul className="right">
-              <li onClick={this.handleSettings}><i rel="tipsy" className="fa fa-cogs" title="Settings"></i></li>
-              <li onClick={this.props.handleHome}><i rel="tipsy" className="fa fa-home" title="Home"></i></li>
-              <li onClick={this.handleExit}><i rel="tipsy" className="fa fa-sign-out" title="Exit"></i></li>
+              <li rel="tipsy" title="Settings" onClick={this.handleSettings}><i className="fa fa-cogs"></i></li>
+              <li rel="tipsy" title="Home" onClick={this.props.handleHome}><i className="fa fa-home"></i></li>
+              <li rel="tipsy" title="Exit" onClick={this.handleExit}><i className="fa fa-sign-out"></i></li>
             </ul>
           </section>
         </nav>
