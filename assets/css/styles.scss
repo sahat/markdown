@@ -90,12 +90,17 @@ video {
 \*------------------------------------*/
 
 .top-bar-section ul li {
+  cursor: pointer;
   position: relative;
-  padding: 0 15px;
-  font-size: 0.8125rem;
+  padding: 10px 15px;
   line-height: $topbar-height;
   color: #b4bac1;
   background: transparent;
+  transition: color .2s ease-in;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .title {
@@ -127,39 +132,6 @@ video {
   display: none;
 }
 
-
-
-
-
-/*------------------------------------*\
-    ICONS
-\*------------------------------------*/
-
-@font-face {
-  font-family: 'Entypo';
-  src: url('../fonts/entypo.woff');
-}
-
-[class^='icon-'] {
-  font: 3.4em 'Entypo';
-  line-height: $topbar-height;
-  color: #b4bac1;
-  cursor: pointer;
-  transition: color .2s ease-in;
-  -webkit-user-select: none;
-
-  &:hover {
-    color: #fff;
-  }
-}
-
-.icon-new:before { content: '\E003'; }
-.icon-yaml:before { content: '\1F4F0'}
-.icon-exit:before { content: '\E740'; }
-.icon-home:before { content: '\2302'; }
-.icon-save:before { content: '\1F4BE'; }
-.icon-publish:before { content: '\1F4E4'; }
-.icon-settings:before { content: '\2692'; }
 
 
 
