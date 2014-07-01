@@ -7,12 +7,12 @@
   "window": {
     "title": "Github Markdown",
     "width": 650,
-    "height": 650,
+    "height": 550,
     "min_width": 650,
-    "min_height": 650,
+    "min_height": 550,
     "toolbar": true
   },
-  "chromium-args": "--child-clean-exit",
+  "chromium-args": "--child-clean-exit --enable-direct-write",
   "js-flags": "--harmony",
   "scripts": {
     "test": "jest"
