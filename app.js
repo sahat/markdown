@@ -284,8 +284,18 @@ var Topbar = React.createClass({
   },
   render: function() {
     if (this.props.editMode) {
-      var frontMatter = <li rel="tipsy" title="Edit Front-matter" onClick={this.handleFrontMatter}><i className="fa fa-magic"></i></li>;
-      var publishLink = <li rel="tipsy" title="Publish to GitHub"><i className="fa fa-github"></i></li>;
+      var frontMatter = (
+        <li rel="tipsy" title="Edit Front-matter" onClick={this.handleFrontMatter}>
+          <i className="ion-edit"></i>
+        </li>
+      );
+
+      var publishLink = (
+        <li rel="tipsy" title="Publish to GitHub">
+          <i className="ion-ios7-cloud-upload"></i>
+        </li>
+      );
+
       var savingText = <li>{this.props.savingText}</li>;
     }
     var blogName = this.props.blogPath.split('/').slice(-1).toString();
@@ -295,15 +305,23 @@ var Topbar = React.createClass({
           <section className="top-bar-section">
             <span onClick={this.handleBlogName} rel="tipsy" className="title" title={this.props.blogPath}>{blogName}</span>
             <ul className="left">
-              <li rel="tipsy" title="New Post" onClick={this.handleNewPost}><i  className="fa fa-file-text"></i></li>
+              <li rel="tipsy" title="New Post" onClick={this.handleNewPost}>
+                <i className="ion-compose"></i>
+              </li>
               {frontMatter}
               {publishLink}
               {savingText}
             </ul>
             <ul className="right">
-              <li rel="tipsy" title="Settings" onClick={this.handleSettings}><i className="fa fa-cogs"></i></li>
-              <li rel="tipsy" title="Home" onClick={this.props.handleHome}><i className="fa fa-home"></i></li>
-              <li rel="tipsy" title="Exit" onClick={this.handleExit}><i className="fa fa-sign-out"></i></li>
+              <li rel="tipsy" title="Settings" onClick={this.handleSettings}>
+                <i className="ion-settings"></i>
+              </li>
+              <li rel="tipsy" title="Home" onClick={this.props.handleHome}>
+                <i className="ion-home"></i>
+              </li>
+              <li rel="tipsy" title="Exit" onClick={this.handleExit}>
+                <i className="ion-log-out"></i>
+              </li>
             </ul>
           </section>
         </nav>

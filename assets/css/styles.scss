@@ -8,7 +8,7 @@
  */
 
 $topbar-height: 35px;
-$topbar-bg: #2e2e2e;
+$topbar-bg: #121212;
 $button-margin-bottom: 0;
 
 @import "lib/foundation";
@@ -101,6 +101,7 @@ video {
 
   i {
     padding: 10px 15px;
+    font-size: 22px;
   }
 
   &:hover {
