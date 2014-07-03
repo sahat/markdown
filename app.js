@@ -8,6 +8,9 @@ var spawn = require('child_process').spawn;
 var yaml = require('js-yaml');
 
 var App = React.createClass({
+  componentDidMount: function() {
+    document.body.classList.add('splash')
+  },
   getInitialState: function() {
     return {
       blogDidLoad: false,
@@ -24,7 +27,11 @@ var App = React.createClass({
     this.setState({ posts: posts });
   },
   setBlogDidLoad: function(value) {
-    console.log('upading blog did load')
+    if (!value) {
+      document.body.classList.add('splash')
+    } else {
+      document.body.classList.remove('splash')
+    }
     this.setState({ blogDidLoad: value })
   },
   setEditMode: function(value) {
@@ -58,8 +65,6 @@ var Home = React.createClass({
   componentDidMount: function() {
     this.refs.fileDialog.getDOMNode().addEventListener('change', this.setBlogPath);
     this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
-    this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
-    this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
   },
   componentDidUpdate: function() {
     if (this.props.blogDidLoad) {
@@ -67,8 +72,6 @@ var Home = React.createClass({
     } else {
       this.refs.fileDialog.getDOMNode().addEventListener('change', this.setBlogPath);
       this.refs.fileDialog.getDOMNode().setAttribute('nwdirectory', '');
-      this.refs.motionLoop.getDOMNode().setAttribute('autoplay', '');
-      this.refs.motionLoop.getDOMNode().setAttribute('loop', '');
     }
   },
   injectScripts: function(iframe, appLocalPath) {
@@ -242,9 +245,6 @@ var Home = React.createClass({
     } else {
       return (
         <div className="home">
-          <video ref="motionLoop">
-            <source src="assets/video/videohive_glossy-silver.webmhd.webm" type="video/webm" />
-          </video>
           <h1>Jekyll Blog Editor</h1>
           <button ref="openBlog" onClick={this.handleOpenBlog} className="outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
