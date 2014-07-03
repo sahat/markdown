@@ -12,6 +12,7 @@ $topbar-bg: #2e2e2e;
 $button-margin-bottom: 0;
 
 @import "lib/foundation";
+@import "lib/ionicons/ionicons";
 
 body {
   padding-top: $topbar-height;
