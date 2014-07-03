@@ -59,6 +59,8 @@ var Home = React.createClass({
     return {
       savingText: '',
       blogBaseUrl: '',
+      jekyllStatus: '',
+      isLoading: false,
       frontMatter: null
     }
   },
@@ -133,24 +135,22 @@ var Home = React.createClass({
     this.props.setPosts(posts);
   },
   setBlogPath: function(e) {
+    this.setState({ isLoading: true });
+
     var loc = e.target.value.split(path.sep).join('/');
-
     this.props.setBlogPath(loc);
-
-    // TODO: if !(windows) use jekyll instead
-    console.log(loc);
-    console.log(e.target.value);
     var cmd = (process.platform === 'win32') ? 'jekyll.bat' : 'jekyll';
     var child = spawn(cmd, ['serve', '--watch', '-s', loc]);
-
     child.stdout.on('data', function (data) {
       var line = data.toString();
+      this.setState({ jekyllStatus: line });
       console.log(line);
       var serverRunning = 'Server running...';
       var portInUse = (process.platform === 'win32') ? 'Only one usage of each socket address' : 'Address already in use';
       if (line.match(serverRunning) && line.match(serverRunning).length ||
         line.match(portInUse) && line.match(portInUse).length) {
         this.blogDidLoad(true);
+        this.setState({ isLoading: false });
       }
     }.bind(this));
 
@@ -173,14 +173,12 @@ var Home = React.createClass({
         var file = fs.readFileSync(path.join(postsDir, postFile), 'utf8');
         var frontMatter = file.split('---').slice(0,2);
         if (self.state.frontMatter) {
-          console.log(self.stateFrontMatter)
-          frontMatter[1] = self.state.frontMatter
+          frontMatter[1] = self.state.frontMatter;
         } else {
           self.setState({ frontMatter: frontMatter[1] });
         }
 
         window.frontMatter = frontMatter;
-//        frontMatter[1] = frontMatter[1].trim();
         frontMatter.push('\n\n');
         frontMatter = frontMatter.join('---');
         console.log(frontMatter);
@@ -218,6 +216,10 @@ var Home = React.createClass({
     this.setState({ frontMatter: frontMatter });
   },
   render: function() {
+
+    if (this.state.isLoading) {
+      var loading = <div><span className="ion-loading-c"></span> Starting Jekyll Server...</div>;
+    }
     if (this.props.blogDidLoad) {
       return (
         <div>
@@ -248,7 +250,8 @@ var Home = React.createClass({
           <h1>Jekyll Blog Editor</h1>
           <button ref="openBlog" onClick={this.handleOpenBlog} className="outline">Open Blog</button>
           <input ref="fileDialog" type="file" className="hidden" />
-          <h4>Select a local Jekyll blog</h4>
+          <h4 ref="subheading">Select a local Jekyll blog</h4>
+          <h4>{loading}</h4>
         </div>
       );
     }
