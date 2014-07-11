@@ -166,7 +166,7 @@ var Home = React.createClass({
     var postSlug = iframe.location.pathname.replace(/\//g, '');
     var container = iframe.document.querySelector('.post-content');
     var markdown = md(container.innerHTML, { inline:true });
-    markdown = markdown.replace('’', '\'');
+    markdown = markdown.replace('’', 'ZZZ');
     var self = this;
     _.each(this.props.posts, function(postFile) {
       if (postFile.match(postSlug)) {
@@ -354,22 +354,21 @@ var ModalDialog = React.createClass({
   render: function() {
     if (this.props.frontMatter) {
       var frontMatter = yaml.load(this.props.frontMatter);
+      var inputFields = [];
+      for (var key in frontMatter) {
+        if (frontMatter.hasOwnProperty(key)) {
+          inputFields.push(
+            <label>{key}
+              <input ref="{key}" type="text" defaultValue={frontMatter[key]} />
+            </label>
+          );
+        }
+      }
       return (
         <div className="reveal-modal" data-reveal>
           <form onSubmit={this.handleSubmit}>
-            <label>Layout
-              <input ref="layout" type="text" defaultValue={frontMatter.layout} />
-            </label>
-            <label>Title
-              <input ref="title" type="text" defaultValue={frontMatter.title} />
-            </label>
-            <label>Excerpt
-              <input ref="excerpt" type="text" defaultValue={frontMatter.excerpt} />
-            </label>
-            <label>Image
-              <input ref="image" type="text" defaultValue={frontMatter.image} />
-            </label>
-            <button type="submit" className="small">Update</button>
+          {inputFields}
+          <button type="submit" className="small">Update</button>
           </form>
           <a className="close-reveal-modal">&#215;</a>
         </div>
