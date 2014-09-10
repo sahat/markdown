@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
 
+var yaml = require('js-yaml');
+
+
 var ModalDialog = React.createClass({
   hide: function() {
     $(this.getDOMNode()).foundation('reveal', 'close');

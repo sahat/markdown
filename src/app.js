@@ -5,7 +5,6 @@ var fs = require('fs');
 var path = require('path');
 var http = require('http');
 var spawn = require('child_process').spawn;
-var yaml = require('js-yaml');
 
 var App = React.createClass({
   componentDidMount: function() {

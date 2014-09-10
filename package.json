@@ -1,19 +1,7 @@
 {
-  "name": "nw-demo",
-  "main": "index.html",
-  "node-remote": "localhost",
-  "version": "0.0.1",
-  "single-instance": true,
-  "window": {
-    "title": "Github Markdown",
-    "width": 650,
-    "height": 550,
-    "min_width": 650,
-    "min_height": 550,
-    "toolbar": true
-  },
-  "chromium-args": "--child-clean-exit --enable-direct-write",
-  "js-flags": "--harmony",
+  "name": "markdown",
+  "main": "src/main.js",
+  "version": "0.0.0",
   "scripts": {
     "test": "jest"
   },
@@ -26,6 +14,8 @@
   },
   "devDependencies": {
     "envify": "^1.2.1",
+    "gulp-browserify": "^0.5.0",
+    "gulp-rename": "^1.2.0",
     "jest-cli": "^0.1.15",
     "react": "^0.10.0"
   }
