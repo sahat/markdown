@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "envify": "^1.2.1",
+    "gulp-plumber": "^0.6.6",
+    "gulp-sass": "^1.1.0",
     "jest-cli": "^0.1.15",
     "react": "^0.10.0"
   }
