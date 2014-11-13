@@ -1,22 +1,88 @@
 <html>
 <head>
   <title>React App</title>
-  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <link rel="stylesheet" href="assets/styles/main.css"/>
+  <style type="text/css" media="screen">
+    #editor {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+
+  <style type="text/css">
+
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #left-component {
+      right: 50%;
+      margin-right: 5px;
+    }
+
+    #my-divider {
+      right: 50%;
+      width: 5px;
+    }
+
+    #right-component {
+      width: 50%;
+    }
+
+  </style>
 </head>
 <body>
 
+<div class="pretty-split-pane-frame"><!-- This div is added for styling purposes only. It's not part of the split-pane plugin. -->
+  <div class="split-pane vertical-percent">
+    <div class="split-pane-component" id="left-component">
+      <div class="pretty-split-pane-component-inner"><!-- This div is added for styling purposes only. It's not part of the split-pane plugin. -->
+        <p>This split pane component width is in percent. <code>min-width</code> (<code>0px</code> in this exampe) will be respected</p>
+        <p>Re-size the window and move the divider to see the effect!</p>
+        <pre id="editor"></pre>
+      </div>
+    </div>
+    <div class="split-pane-divider" id="my-divider"></div>
+    <div class="split-pane-component" id="right-component">
+      <div class="pretty-split-pane-component-inner"><!-- This div is added for styling purposes only. It's not part of the split-pane plugin. -->
+        <p>This split pane component width is in percent. <code>min-width</code> (<code>0px</code> in this exampe) will be respected</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/lib/ace/ace.js"></script>
+<script>
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/github")
+  editor.session.setMode("ace/mode/markdown")
+
+</script>
 <script src="assets/js/lib/jquery.js"></script>
-<script src="assets/js/lib/foundation/foundation.js"></script>
-<script src="assets/js/lib/foundation/foundation.reveal.js"></script>
-<script src="assets/js/lib/jquery.tipsy.js"></script>
-<script src="assets/js/lib/react.js"></script>
-<script src="assets/js/lib/JSXTransformer.js"></script>
-<script src="assets/js/lib/html.md.js"></script>
-<script type="text/jsx" src="src/home.js"></script>
-<script type="text/jsx" src="src/topbar.js"></script>
-<script type="text/jsx" src="src/modal.js"></script>
-<script type="text/jsx" src="src/new.js"></script>
-<script type="text/jsx" src="src/app.js"></script>
+<script src="assets/js/lib/split-pane.js"></script>
+
+<script>
+  $(function() {
+    $('div.split-pane').splitPane();
+  });
+</script>
+<!--<script src="assets/js/lib/foundation/foundation.js"></script>-->
+<!--<script src="assets/js/lib/foundation/foundation.reveal.js"></script>-->
+<!--<script src="assets/js/lib/jquery.tipsy.js"></script>-->
+<!--<script src="assets/js/lib/react-with-addons.js"></script>-->
+<!--<script src="assets/js/lib/JSXTransformer.js"></script>-->
+<!--<script src="assets/js/lib/html.md.js"></script>-->
+<!--<script type="text/jsx" src="src/home.js"></script>-->
+<!--<script type="text/jsx" src="src/topbar.js"></script>-->
+<!--<script type="text/jsx" src="src/modal.js"></script>-->
+<!--<script type="text/jsx" src="src/new.js"></script>-->
+<!--<script type="text/jsx" src="src/app.js"></script>-->
 
 </body>
 </html>
